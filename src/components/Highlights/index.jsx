@@ -34,131 +34,28 @@ const initialHighlightData = [
 ];
 
 const highlightDataReducer = (state, action) => {
+	let stateCopy = [...state];
 	switch (action.type) {
 		case 'TOTAL_GRP_ISCLICKED':
-			return [
-			{
-				icon: 'group',
-				num: 'TEST',
-				text: 'Total groups',
-				id: 't_grps',
-				isClick: true,
-			},
-			{
-				icon: 'assignmentTurnedIn',
-				num: 'TEST',
-				text: 'Completed among',
-				id: 'completed_grps',
-				isClick: false,
-			},
-			{
-				icon: 'emojiEvents',
-				num: 'TEST',
-				text: 'Best group',
-				id: 'best_grp',
-				isClick: false,
-			},
-			{
-				icon: 'functions',
-				num: 'TEST',
-				text: '總生產 %',
-				id: 't_prd',
-				isClick: false,
-			},
-		];
+			stateCopy.forEach(card => {
+				(card.icon === 'group') ? card.isClick = true : card.isClick = false ;
+			});
+			return stateCopy;
 		case 'COMPLETED_GRP_ISCLICKED':
-			return [
-			{
-				icon: 'group',
-				num: 'TEST',
-				text: 'Total groups',
-				id: 't_grps',
-				isClick: false,
-			},
-			{
-				icon: 'assignmentTurnedIn',
-				num: 'TEST',
-				text: 'Completed among',
-				id: 'completed_grps',
-				isClick: true,
-			},
-			{
-				icon: 'emojiEvents',
-				num: 'TEST',
-				text: 'Best group',
-				id: 'best_grp',
-				isClick: false,
-			},
-			{
-				icon: 'functions',
-				num: 'TEST',
-				text: '總生產 %',
-				id: 't_prd',
-				isClick: false,
-			},
-		];
+			stateCopy.forEach(card => {
+				(card.icon === 'assignmentTurnedIn') ? card.isClick = true : card.isClick = false ;
+			});
+			return stateCopy;
 		case 'TROPHY_ISCLICKED':
-			return [
-			{
-				icon: 'group',
-				num: 'TEST',
-				text: 'Total groups',
-				id: 't_grps',
-				isClick: false,
-			},
-			{
-				icon: 'assignmentTurnedIn',
-				num: 'TEST',
-				text: 'Completed among',
-				id: 'completed_grps',
-				isClick: false,
-			},
-			{
-				icon: 'emojiEvents',
-				num: 'TEST',
-				text: 'Best group',
-				id: 'best_grp',
-				isClick: true,
-			},
-			{
-				icon: 'functions',
-				num: 'TEST',
-				text: '總生產 %',
-				id: 't_prd',
-				isClick: false,
-			},
-		];
+			stateCopy.forEach(card => {
+				(card.icon === 'emojiEvents') ? card.isClick = true : card.isClick = false ;
+			});
+			return stateCopy;
 		case 'TOTAL_PRD_ISCLICKED':
-			return [
-			{
-				icon: 'group',
-				num: 'TEST',
-				text: 'Total groups',
-				id: 't_grps',
-				isClick: false,
-			},
-			{
-				icon: 'assignmentTurnedIn',
-				num: 'TEST',
-				text: 'Completed among',
-				id: 'completed_grps',
-				isClick: false,
-			},
-			{
-				icon: 'emojiEvents',
-				num: 'TEST',
-				text: 'Best group',
-				id: 'best_grp',
-				isClick: false,
-			},
-			{
-				icon: 'functions',
-				num: 'TEST',
-				text: '總生產 %',
-				id: 't_prd',
-				isClick: true,
-			},
-		];
+			stateCopy.forEach(card => {
+				(card.icon === 'functions') ? card.isClick = true : card.isClick = false ;
+			});
+			return stateCopy;
 		default:
 			return;
 	}
