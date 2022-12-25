@@ -26,16 +26,43 @@ const initDates = (data) => {
 	return dates;
 };
 
+const getGroups = (originData) => {
+	let groups = [];
+	for (let i = 0; i < originData.length; i++) {
+		if (i === 0) {
+			groups.push({
+				GRP_ID: originData[i].GRP_ID,
+				data: [],
+			});
+		} else {
+			if (originData[i - 1].GRP_ID !== originData[i].GRP_ID) {
+				groups.push({
+					GRP_ID: originData[i].GRP_ID,
+					data: [],
+				});
+			}
+		}
+	}
+	groups.forEach((group) => {
+		group.data = originData.filter((data) => data.GRP_ID === group.GRP_ID);
+	});
+	console.log(groups, 'groups');
+	return groups;
+};
+
 function App() {
 	const [data, setData] = useState({});
 	const [dates, setDates] = useState({});
 	const [loading, setLoading] = useState(true);
+	const [groupData, setGroupData] = useState(null);
 
 	useEffect(() => {
 		//fetching API data
 		setData(originData);
 		setDates(initDates(originData));
 		setLoading(false);
+		//categorizing by groups
+		setGroupData(getGroups(originData));
 	}, []);
 
 	return (
@@ -44,7 +71,7 @@ function App() {
 				{!loading ? (
 					<Container>
 						<Header />
-						<Highlights />
+						<Highlights groupData={groupData} />
 						<Content originData={data} dates={dates} />
 						<NavBar originData={data} dates={dates} />
 					</Container>

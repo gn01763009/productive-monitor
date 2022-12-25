@@ -1,32 +1,33 @@
 import { Box, Card, CardActionArea, Typography } from '@mui/material';
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import IconSelector from '../IconSelector';
+import HightlightNum from './HightlightNum';
 
 const initialHighlightData = [
 	{
 		icon: 'group',
-		num: 'TEST',
+		num: null,
 		text: 'Total groups',
 		id: 't_grps',
 		isClick: true,
 	},
 	{
 		icon: 'assignmentTurnedIn',
-		num: 'TEST',
+		num: null,
 		text: 'Completed among',
 		id: 'completed_grps',
 		isClick: false,
 	},
 	{
 		icon: 'emojiEvents',
-		num: 'TEST',
+		num: null,
 		text: 'Best group',
 		id: 'best_grp',
 		isClick: false,
 	},
 	{
 		icon: 'functions',
-		num: 'TEST',
+		num: null,
 		text: '總生產 %',
 		id: 't_prd',
 		isClick: false,
@@ -56,16 +57,66 @@ const highlightDataReducer = (state, action) => {
 				(card.icon === 'functions') ? card.isClick = true : card.isClick = false ;
 			});
 			return stateCopy;
+		case 'UPDATE_STATE':
+			stateCopy.forEach(card => {
+				if (card.icon === 'group') {card.num = action.payload.totalGroup};
+				if (card.icon === 'assignmentTurnedIn') {card.num = action.payload.assignmentTurnedIn};
+				if (card.icon === 'emojiEvents') {card.num = action.payload.bestGroup};
+				if (card.icon === 'functions') {card.num = action.payload.totalProductive};
+			});
+			return stateCopy;
 		default:
 			return;
 	}
 };
 
-const Highlights = () => {
+const getCompletedCount = (data) => {
+	let completedCount = 0;
+	data.forEach(group => {
+		let data = group.data[group.data.length - 1];
+		if (data.PRD_QT / data.EXP_QT >= 1) {completedCount ++};
+	})
+	return completedCount;
+};
+
+const getBestGroup = data => {
+	let score = null;
+	let bestGroup;
+	data.forEach(group => {
+		let data = group.data[group.data.length - 1];
+		if (data.PRD_QT / data.EXP_QT >= score) {
+			score = data.PRD_QT / data.EXP_QT;
+			bestGroup = data.GRP_ID;
+		}
+	})
+	return bestGroup;
+};
+
+const getTotalProductive = data => {
+	let sum_PRD_QT = 0;
+	let sum_EXP_QT = 0;
+	data.forEach(group => {
+		let data = group.data[group.data.length - 1];
+		sum_PRD_QT = sum_PRD_QT + data.PRD_QT;
+		sum_EXP_QT = sum_EXP_QT + data.EXP_QT;
+	});
+	return (sum_PRD_QT / sum_EXP_QT * 100).toFixed(2).toString() + '%';
+};
+
+const Highlights = ({ groupData }) => {
 	const [state, dispatch] = useReducer(
 		highlightDataReducer,
 		initialHighlightData
 	);
+
+	useEffect(() => {
+		dispatch({type: 'UPDATE_STATE', payload: {
+			totalGroup: groupData.length,
+			assignmentTurnedIn: getCompletedCount(groupData),
+			bestGroup: getBestGroup(groupData),
+			totalProductive: getTotalProductive(groupData),
+		}})
+	}, []);
 
 	const clickHandler = (id) => {
 		if (id === 't_grps') {dispatch({ type: 'TOTAL_GRP_ISCLICKED' })};
@@ -115,34 +166,21 @@ const Highlights = () => {
 										mt: '16px',
 									}}>
 										<IconSelector id={card.icon} />
-									<Typography
-										variant='body1'
-										sx={{
-											display: 'block',
-											width: '100%',
-											mt: '8px',
-											mb: '4px',
-											fontSize: '24px',
-											color: !card.isClick
-												? (theme) => theme.palette.background.default
-												: 'white',
-										}}>
-										{card.num}
-									</Typography>
-									<Typography
-										variant='caption'
-										sx={{
-											display: 'block',
-											width: '100%',
-											mt: 0,
-											mb: 4,
-											fontSize: '12px',
-											color: !card.isClick
-												? (theme) => theme.palette.background.default
-												: 'white',
-										}}>
-										{card.text}
-									</Typography>
+										<HightlightNum card={card} />
+										<Typography
+											variant='caption'
+											sx={{
+												display: 'block',
+												width: '100%',
+												mt: 0,
+												mb: 4,
+												fontSize: '12px',
+												color: !card.isClick
+													? (theme) => theme.palette.background.default
+													: 'white',
+											}}>
+											{card.text}
+										</Typography>
 								</Box>
 							</Card>
 						</CardActionArea>
