@@ -49,7 +49,6 @@ const highlightDataReducer = (state, action) => {
 					if (card.id === id) {card.num = result};
 				})
 			})
-			// const { result, id} = action.payload;
 			// stateCopy.forEach(card => {
 			// 	if (card.id === id) {card.num = result};
 				// if (card.icon === 'group') {card.num = action.payload.totalGroup};
@@ -129,10 +128,6 @@ const Highlights = ({ groupData }) => {
 
 	const clickHandler = (id) => {
 		dispatch({type: 'CLICKED', payload: id});
-		// if (id === 't_grps') {dispatch({ type: 'TOTAL_GRP_ISCLICKED' })};
-		// if (id === 'completed_grps') {dispatch({ type: 'COMPLETED_GRP_ISCLICKED' })};
-		// if (id === 'best_grp') {dispatch({ type: 'TROPHY_ISCLICKED' })};
-		// if (id === 't_prd') {dispatch({ type: 'TOTAL_PRD_ISCLICKED' })};
 	};
 
 	return (
