@@ -37,70 +37,70 @@ const initialHighlightData = [
 const highlightDataReducer = (state, action) => {
 	let stateCopy = [...state];
 	switch (action.type) {
-		case 'TOTAL_GRP_ISCLICKED':
+		case 'CLICKED':
 			stateCopy.forEach(card => {
-				(card.icon === 'group') ? card.isClick = true : card.isClick = false ;
-			});
-			return stateCopy;
-		case 'COMPLETED_GRP_ISCLICKED':
-			stateCopy.forEach(card => {
-				(card.icon === 'assignmentTurnedIn') ? card.isClick = true : card.isClick = false ;
-			});
-			return stateCopy;
-		case 'TROPHY_ISCLICKED':
-			stateCopy.forEach(card => {
-				(card.icon === 'emojiEvents') ? card.isClick = true : card.isClick = false ;
-			});
-			return stateCopy;
-		case 'TOTAL_PRD_ISCLICKED':
-			stateCopy.forEach(card => {
-				(card.icon === 'functions') ? card.isClick = true : card.isClick = false ;
+				(card.id === action.payload) ? card.isClick = true : card.isClick = false ;
 			});
 			return stateCopy;
 		case 'UPDATE_STATE':
-			stateCopy.forEach(card => {
-				if (card.icon === 'group') {card.num = action.payload.totalGroup};
-				if (card.icon === 'assignmentTurnedIn') {card.num = action.payload.assignmentTurnedIn};
-				if (card.icon === 'emojiEvents') {card.num = action.payload.bestGroup};
-				if (card.icon === 'functions') {card.num = action.payload.totalProductive};
-			});
+			action.payload.forEach(cardData => {
+				let { result, id } = cardData;
+				stateCopy.forEach(card => {
+					if (card.id === id) {card.num = result};
+				})
+			})
+			// const { result, id} = action.payload;
+			// stateCopy.forEach(card => {
+			// 	if (card.id === id) {card.num = result};
+				// if (card.icon === 'group') {card.num = action.payload.totalGroup};
+				// if (card.icon === 'assignmentTurnedIn') {card.num = action.payload.assignmentTurnedIn};
+				// if (card.icon === 'emojiEvents') {card.num = action.payload.bestGroup};
+				// if (card.icon === 'functions') {card.num = action.payload.totalProductive};
+			// });
 			return stateCopy;
 		default:
 			return;
 	}
 };
 
-const getCompletedCount = (data) => {
+const getCompletedCount = (data, groupName) => {
 	let completedCount = 0;
-	data.forEach(group => {
-		let data = group.data[group.data.length - 1];
-		if (data.PRD_QT / data.EXP_QT >= 1) {completedCount ++};
-	})
-	return completedCount;
+	groupName.forEach(groupName => {
+		let rowData = data[groupName];
+		let newestData = rowData[rowData.length - 1];
+		if (newestData.PRD_QT / newestData.EXP_QT >= 1) {completedCount ++};
+	});
+	let payload = { result: completedCount, id: 'completed_grps'};
+	return payload;
 };
 
-const getBestGroup = data => {
+const getBestGroup = (data, groupName) => {
 	let score = null;
 	let bestGroup;
-	data.forEach(group => {
-		let data = group.data[group.data.length - 1];
-		if (data.PRD_QT / data.EXP_QT >= score) {
-			score = data.PRD_QT / data.EXP_QT;
-			bestGroup = data.GRP_ID;
+	groupName.forEach(groupName => {
+		let rowData = data[groupName];
+		let newestData = rowData[rowData.length - 1];
+		if (newestData.PRD_QT / newestData.EXP_QT >= score) {
+			score = newestData.PRD_QT / newestData.EXP_QT;
+			bestGroup = groupName;
 		}
-	})
-	return bestGroup;
+	});
+	let payload = { result: bestGroup, id: 'best_grp'};
+	return payload;
 };
 
-const getTotalProductive = data => {
+const getTotalProductive = (data, groupName) => {
 	let sum_PRD_QT = 0;
 	let sum_EXP_QT = 0;
-	data.forEach(group => {
-		let data = group.data[group.data.length - 1];
-		sum_PRD_QT = sum_PRD_QT + data.PRD_QT;
-		sum_EXP_QT = sum_EXP_QT + data.EXP_QT;
+	groupName.forEach(groupName => {
+		let rowData = data[groupName];
+		let newestData = rowData[rowData.length - 1];
+		sum_PRD_QT = sum_PRD_QT + newestData.PRD_QT;
+		sum_EXP_QT = sum_EXP_QT + newestData.EXP_QT;
 	});
-	return (sum_PRD_QT / sum_EXP_QT * 100).toFixed(2).toString() + '%';
+	let result = (sum_PRD_QT / sum_EXP_QT * 100).toFixed(2).toString() + '%';
+	let payload = { result, id: 't_prd'};
+	return payload;
 };
 
 const Highlights = ({ groupData }) => {
@@ -110,19 +110,29 @@ const Highlights = ({ groupData }) => {
 	);
 
 	useEffect(() => {
-		dispatch({type: 'UPDATE_STATE', payload: {
-			totalGroup: groupData.length,
-			assignmentTurnedIn: getCompletedCount(groupData),
-			bestGroup: getBestGroup(groupData),
-			totalProductive: getTotalProductive(groupData),
-		}})
+		let groupName = Object.keys(groupData);
+		dispatch({type: 'UPDATE_STATE', payload: [
+			{
+				result: groupName.length,
+				id: 't_grps',
+			},
+			getCompletedCount(groupData, groupName),
+			getBestGroup(groupData, groupName),
+			getTotalProductive(groupData, groupName)
+		]});
+		// 	totalGroup: groupName.length,
+		// 	assignmentTurnedIn: getCompletedCount(groupData, groupName),
+		// 	bestGroup: getBestGroup(groupData, groupName),
+		// 	totalProductive: getTotalProductive(groupData, groupName),
+		// }})
 	}, []);
 
 	const clickHandler = (id) => {
-		if (id === 't_grps') {dispatch({ type: 'TOTAL_GRP_ISCLICKED' })};
-		if (id === 'completed_grps') {dispatch({ type: 'COMPLETED_GRP_ISCLICKED' })};
-		if (id === 'best_grp') {dispatch({ type: 'TROPHY_ISCLICKED' })};
-		if (id === 't_prd') {dispatch({ type: 'TOTAL_PRD_ISCLICKED' })};
+		dispatch({type: 'CLICKED', payload: id});
+		// if (id === 't_grps') {dispatch({ type: 'TOTAL_GRP_ISCLICKED' })};
+		// if (id === 'completed_grps') {dispatch({ type: 'COMPLETED_GRP_ISCLICKED' })};
+		// if (id === 'best_grp') {dispatch({ type: 'TROPHY_ISCLICKED' })};
+		// if (id === 't_prd') {dispatch({ type: 'TOTAL_PRD_ISCLICKED' })};
 	};
 
 	return (

@@ -26,27 +26,22 @@ const initDates = (data) => {
 	return dates;
 };
 
+// groups = {
+//   "A01": [
+//       {"SEQ_NO":"100","WEE_ID":2,"EFF_DT":"2022-07-18T00:00:00.000Z","WRK_HR":11,"GRP_ID":"A01","CMT_MY":5921.95,"FOB_MY":43979,"PRD_QT":85,"EXP_QT":42,"WRK_QQ":330.05499999999995,"EMP_QT":23,"EMP_QQ":35.3,"I_E_QT":2.27,"CMT_EXP":null},
+//       {"SEQ_NO":"100","WEE_ID":2,"EFF_DT":"2022-07-18T00:00:00.000Z","WRK_HR":11,"GRP_ID":"A01","CMT_MY":5921.95,"FOB_MY":43979,"PRD_QT":85,"EXP_QT":42,"WRK_QQ":330.05499999999995,"EMP_QT":23,"EMP_QQ":35.3,"I_E_QT":2.27,"CMT_EXP":null},
+//     ]
+// }
+
 const getGroups = (originData) => {
 	let groups = [];
-	for (let i = 0; i < originData.length; i++) {
-		if (i === 0) {
-			groups.push({
-				GRP_ID: originData[i].GRP_ID,
-				data: [],
-			});
-		} else {
-			if (originData[i - 1].GRP_ID !== originData[i].GRP_ID) {
-				groups.push({
-					GRP_ID: originData[i].GRP_ID,
-					data: [],
-				});
-			}
+	originData.forEach((rowData) => {
+		if (!groups[rowData.GRP_ID]) {
+			groups[rowData.GRP_ID] = [rowData];
+			return;
 		}
-	}
-	groups.forEach((group) => {
-		group.data = originData.filter((data) => data.GRP_ID === group.GRP_ID);
+		groups[rowData.GRP_ID].push(rowData);
 	});
-	console.log(groups, 'groups');
 	return groups;
 };
 
@@ -60,9 +55,9 @@ function App() {
 		//fetching API data
 		setData(originData);
 		setDates(initDates(originData));
-		setLoading(false);
 		//categorizing by groups
 		setGroupData(getGroups(originData));
+		setLoading(false);
 	}, []);
 
 	return (
