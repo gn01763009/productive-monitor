@@ -29,6 +29,9 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 						mr: '20px',
 						mb: '20px',
 						ml: '20px',
+						width: {
+							md: '95%',
+						},
 					}}>
 					<Typography
 						variant='h3'
