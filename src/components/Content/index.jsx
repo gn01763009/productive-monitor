@@ -66,6 +66,9 @@ const tableCustomStyles = {
 //   },
 // ];
 
+export const underIdText = 'DV9340';
+export const underFobText = 169;
+
 const Content = ({ groupData, dates }) => {
 	let groupName = Object.keys(groupData);
 
@@ -73,11 +76,12 @@ const Content = ({ groupData, dates }) => {
 		{
 			name: 'Group',
 			minWidth: '65px',
+			center: true,
 			selector: (group) => group,
 			cell: (group) => (
 				<div>
 					<div>{group}</div>
-					<div>{'DV9340'}</div>
+					<div>{underIdText}</div>
 				</div>
 			),
 		},
@@ -121,7 +125,7 @@ const Content = ({ groupData, dates }) => {
 							groupData[group][groupData[group].length - 1].FOB_MY
 						)}
 					</div>
-					<div>{169}</div>
+					<div>{underFobText}</div>
 				</div>
 			),
 		},
