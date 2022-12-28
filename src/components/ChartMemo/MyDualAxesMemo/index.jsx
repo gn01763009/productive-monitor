@@ -39,7 +39,7 @@ const MyDualAxes = ({ rowData, width, height, isLegend }) => {
 	};
 
 	return (
-		<Box sx={{ width: width ? width : '100%', height: height }}>
+		<Box sx={{ width: width ? width : '100%', height: height, py: '4px' }}>
 			<DualAxes {...config} rendered='svg' />
 		</Box>
 	);
