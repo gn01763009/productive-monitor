@@ -15,15 +15,15 @@ import Highlights from './components/Highlights';
 const theme = createTheme({ ...themeOptions });
 
 const initDates = (data) => {
-	let dates = [];
-	console.log('data', data);
-	data.forEach((ele) => {
-		if (dates.find((date) => date === moment(ele.EFF_DT).format('YYYY-MM-DD')))
-			return;
-		dates.push(moment(ele.EFF_DT).format('YYYY-MM-DD'));
-	});
-	console.log('dates', dates);
-	return dates;
+  let dates = [];
+  console.log('data', data);
+  data.forEach((ele) => {
+    if (dates.find((date) => date === moment(ele.EFF_DT).format('YYYY-MM-DD')))
+      return;
+    dates.push(moment(ele.EFF_DT).format('YYYY-MM-DD'));
+  });
+  console.log('dates', dates);
+  return dates;
 };
 
 // groups = {
@@ -34,31 +34,31 @@ const initDates = (data) => {
 // }
 
 const getGroups = (originData) => {
-	let groups = [];
-	originData.forEach((rowData) => {
-		if (!groups[rowData.GRP_ID]) {
-			groups[rowData.GRP_ID] = [rowData];
-			return;
-		}
-		groups[rowData.GRP_ID].push(rowData);
-	});
-	return groups;
+  let groups = [];
+  originData.forEach((rowData) => {
+    if (!groups[rowData.GRP_ID]) {
+      groups[rowData.GRP_ID] = [rowData];
+      return;
+    }
+    groups[rowData.GRP_ID].push(rowData);
+  });
+  return groups;
 };
 
 function App() {
-	const [data, setData] = useState({});
-	const [dates, setDates] = useState({});
-	const [loading, setLoading] = useState(true);
-	const [groupData, setGroupData] = useState(null);
+  const [data, setData] = useState({});
+  const [dates, setDates] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [groupData, setGroupData] = useState(null);
 
-	useEffect(() => {
-		//fetching API data
-		setData(originData);
-		setDates(initDates(originData));
-		//categorizing by groups
-		setGroupData(getGroups(originData));
-		setLoading(false);
-	}, []);
+  useEffect(() => {
+    //fetching API data
+    setData(originData);
+    setDates(initDates(originData));
+    //categorizing by groups
+    setGroupData(getGroups(originData));
+    setLoading(false);
+  }, []);
 
 	return (
 		<div className='App'>
@@ -76,7 +76,7 @@ function App() {
 							<NavBar originData={data} dates={dates} />
 						</>
 					) : (
-						<Loading />
+            <Loading />
 					)}
 				</Container>
 			</ThemeProvider>

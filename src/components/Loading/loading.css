@@ -1,0 +1,60 @@
+:root {
+  --px-color-bodybg: rgb(19, 26, 41);
+  --px-color-boxbg: rgb(12, 16, 29);
+  --px-color-boxborder: rgb(27, 34, 55);
+  --px-border-radius: 6px;
+
+  --qt-loadingcolor-main: 211, 214, 222;
+  --qt-loadingcolor-secondary: 61, 107, 245;
+}
+
+.px-griditem{
+  position: absolute;
+  top: 50%;
+  transform: translateX(-16px);
+}
+
+.qt-loading {
+  position: relative;
+  width: 35em;
+  height: 3em;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: 0;
+}
+
+/* qtload008 */
+#qt-loading-qtload008 {
+  width: 2em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#qt-loading-qtload008 > div {
+  position: relative;
+  width: 0.3em;
+  height: 1.6em;
+  border-radius: 0.15em;
+  background-color: rgb(var(--qt-loadingcolor-main));
+  animation: qt-loadanim007 2s infinite linear;
+}
+#qt-loading-qtload008 > div:nth-child(2) {
+  animation-delay: 0.3s;
+}
+#qt-loading-qtload008 > div:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes qt-loadanim007 {
+  0% {
+    transform: scaleY(100%);
+  }
+  20% {
+    transform: scaleY(200%);
+  }
+  40% {
+    transform: scaleY(100%);
+  }
+}

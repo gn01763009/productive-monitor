@@ -1,20 +1,23 @@
 import React from 'react';
 import { CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
+import './loading.css';
 
 const Loading = () => {
+  const refCount = React.useRef(0);
+
+  refCount.current++;
   return (
-    <CircularProgress
-      size={48}
-      sx={{
-        display: 'block',
-        mt: '8px',
-        mb: '4px',
-        ml: 'auto',
-        mr: 'auto',
-        color: (theme) => theme.palette.background.default,
-      }}
-    />
+    <Box sx={{ display: 'flex' }}>
+      <div className="px-griditem">
+        <div id="qt-loading-qtload008" className="qt-loading">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </Box>
   )
 }
 
-export default Loading
+export default Loading;

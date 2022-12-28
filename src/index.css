@@ -1,9 +1,14 @@
 body {
   margin: 0;
-  font-family: "Roboto";
+  padding: 0;
+  background-color: #56657F;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#root{
+  width: 100%;
 }
