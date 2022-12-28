@@ -1,7 +1,7 @@
-import { Box, Modal, Typography } from '@mui/material';
+import { Box, Modal, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
-import { MyDualAxesMemo } from '..';
 import { underFobText, underIdText } from '../../Content';
+import MyDualAxesMemo from '../MyDualAxesMemo';
 
 const style = {
 	position: 'absolute',
@@ -19,6 +19,7 @@ const style = {
 
 const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 	const modalCloseHandler = () => setIsOpen(!isOpen);
+	const matches = useMediaQuery('(min-width:392px)');
 
 	return (
 		<Modal open={isOpen} onClose={modalCloseHandler}>
@@ -29,9 +30,6 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 						mr: '20px',
 						mb: '20px',
 						ml: '20px',
-						width: {
-							md: '95%',
-						},
 					}}>
 					<Typography
 						variant='h3'
@@ -55,7 +53,12 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 						}}>
 						{underIdText}
 					</Typography>
-					<MyDualAxesMemo rowData={rowData} height={'150px'} />
+					<MyDualAxesMemo
+						rowData={rowData}
+						width={matches ? '690px' : '322px'}
+						height='150px'
+						isLegend={true}
+					/>
 					<Box
 						sx={{
 							display: 'inline-block',

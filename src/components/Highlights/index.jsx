@@ -145,6 +145,8 @@ const Highlights = ({ groupData }) => {
 				width: '100%',
 				overflowX: 'auto',
 				backgroundColor: 'rgba(0, 0, 0, 0.2)',
+				px: '20px',
+				boxSizing: 'border-box',
 			}}>
 			<Box
 				sx={{

@@ -66,6 +66,7 @@ function App() {
 				<Container
 					sx={{
 						backgroundColor: (theme) => theme.palette.background.default,
+						px: 0,
 					}}>
 					{!loading ? (
 						<>
