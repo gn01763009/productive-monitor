@@ -58,6 +58,7 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 						width={matches ? '690px' : '322px'}
 						height='150px'
 						isLegend={true}
+						isLabel={true}
 					/>
 					<Box
 						sx={{

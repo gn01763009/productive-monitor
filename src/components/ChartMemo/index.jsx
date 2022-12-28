@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Box, ButtonBase } from '@mui/material';
-import ChartModal from './ChartModal';
+import React from 'react';
+import { Box } from '@mui/material';
 import MyDualAxesMemo from './MyDualAxesMemo';
 
 const Chart = ({ rowData }) => {
@@ -10,7 +9,7 @@ const Chart = ({ rowData }) => {
 
 	return (
 		<Box sx={{ width: '100%' }}>
-			<MyDualAxesMemo rowData={rowData} height={'125px'} />
+			<MyDualAxesMemo rowData={rowData} height={'125px'} isLabel={false} />
 			{/* <ChartModal isOpen={isOpen} setIsOpen={setIsOpen} rowData={rowData} /> */}
 		</Box>
 	);
