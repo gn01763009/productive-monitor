@@ -161,7 +161,10 @@ const Highlights = ({ groupData }) => {
 				}}>
 				{state.map((card) => {
 					return (
-						<CardActionArea onClick={() => clickHandler(card.id)} key={card.id}>
+						<CardActionArea
+							onClick={() => clickHandler(card.id)}
+							key={card.id}
+							sx={{ borderRadius: '10px' }}>
 							<Card
 								sx={{
 									width: 156,
