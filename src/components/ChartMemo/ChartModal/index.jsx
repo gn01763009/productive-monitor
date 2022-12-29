@@ -17,6 +17,11 @@ const style = {
 	boxShadow: '1px 4px 6px rgba(0, 0, 0, 0.25)',
 };
 
+const getProductivity = (PRD_QT, EXP_QT) => {
+	const answer = (PRD_QT / EXP_QT) * 100;
+	return answer;
+};
+
 const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 	const modalCloseHandler = () => setIsOpen(!isOpen);
 	const matches = useMediaQuery('(min-width:392px)');
@@ -69,15 +74,28 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 							color: 'white',
 						}}>
 						<Typography variant='body1' fontSize={'12px'}>
-							{rowData[rowData.length - 1].CMT_MY}
+							{rowData[rowData.length - 1].CMT_MY.toFixed(2)}
 						</Typography>
-						<Typography variant='body1' fontSize={'12px'} sx={{ mt: '4px' }}>
-							{(
-								rowData[rowData.length - 1].PRD_QT /
+						<Typography
+							variant='body1'
+							fontSize={'12px'}
+							sx={{
+								width: '50px',
+								mt: '4px',
+								ml: 'auto',
+								mr: 'auto',
+								backgroundColor:
+									getProductivity(
+										rowData[rowData.length - 1].PRD_QT,
+										rowData[rowData.length - 1].EXP_QT
+									) > 100
+										? '#0BC07A'
+										: 'red',
+							}}>
+							{getProductivity(
+								rowData[rowData.length - 1].PRD_QT,
 								rowData[rowData.length - 1].EXP_QT
-							).toFixed(2) *
-								100 +
-								'%'}
+							).toFixed(2) + '%'}
 						</Typography>
 					</Box>
 					<Box
