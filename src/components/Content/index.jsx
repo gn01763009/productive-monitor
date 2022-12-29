@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import React from 'react';
 import DataTable from 'react-data-table-component';
 import ChartMemo from '../ChartMemo';
@@ -12,14 +13,15 @@ const tableCustomStyles = {
 		style: {
 			background: '#184059',
 			color: 'white',
-			paddingLeft: '8px',
-			paddingRight: '8px',
+			paddingLeft: '2px',
+			paddingRight: '2px',
+			overflow: 'auto',
 		},
 	},
 	cells: {
 		style: {
-			paddingLeft: '8px',
-			paddingRight: '8px',
+			paddingLeft: '0px',
+			paddingRight: '0px',
 		},
 	},
 };
@@ -33,7 +35,7 @@ const Content = ({ groupData, dates }) => {
 	const columns = [
 		{
 			name: 'Group',
-			minWidth: '65px',
+			minWidth: '50px',
 			center: true,
 			selector: (group) => group,
 			cell: (group) => (
@@ -45,15 +47,15 @@ const Content = ({ groupData, dates }) => {
 		},
 		{
 			name: 'Trend',
-			// selector: group => group.time,
-			minWidth: '155px',
+			minWidth: '180px',
 			center: true,
 			cell: (group) => <ChartMemo rowData={groupData[group]} />,
 		},
 		{
 			name: 'CMT',
-			minWidth: '65px',
+			minWidth: '40px',
 			center: true,
+			sortable: true,
 			selector: (group) => groupData[group][groupData[group].length - 1].CMT_MY,
 			cell: (group) => (
 				<div>
@@ -73,8 +75,9 @@ const Content = ({ groupData, dates }) => {
 		},
 		{
 			name: 'FOB/QTY',
-			minWidth: '65px',
+			minWidth: '78px',
 			center: true,
+			sortable: true,
 			selector: (group) => groupData[group][groupData[group].length - 1].FOB_MY,
 			cell: (group) => (
 				<div>
