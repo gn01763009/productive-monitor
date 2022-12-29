@@ -1,10 +1,11 @@
 import React from 'react';
 import DataTable from 'react-data-table-component';
 import ChartMemo from '../ChartMemo';
+import BackgroundColorText from './BackgroundColorText';
 
 const percentageHandler = (arg1, arg2 = 1) => {
 	const num = arg1 / arg2;
-	return Math.round(num * 100) / 100;
+	return Math.round(num * 1000) / 10;
 };
 
 const tableCustomStyles = {
@@ -58,16 +59,14 @@ const Content = ({ groupData, dates }) => {
 			cell: (group) => (
 				<div>
 					<div>
-						{percentageHandler(
-							groupData[group][groupData[group].length - 1].CMT_MY
-						)}
+						{Math.round(groupData[group][groupData[group].length - 1].CMT_MY * 1000) / 1000}
 					</div>
-					<div>
+					<BackgroundColorText prd={groupData[group][groupData[group].length - 1].PRD_QT} exp={groupData[group][groupData[group].length - 1].EXP_QT} >
 						{percentageHandler(
 							groupData[group][groupData[group].length - 1].PRD_QT,
 							groupData[group][groupData[group].length - 1].EXP_QT
-						)}
-					</div>
+						) + "%"}
+					</BackgroundColorText>
 				</div>
 			),
 		},
@@ -79,9 +78,7 @@ const Content = ({ groupData, dates }) => {
 			cell: (group) => (
 				<div>
 					<div>
-						{percentageHandler(
-							groupData[group][groupData[group].length - 1].FOB_MY
-						)}
+						{Math.round(groupData[group][groupData[group].length - 1].FOB_MY * 1000) / 1000}
 					</div>
 					<div>{underFobText}</div>
 				</div>
