@@ -1,17 +1,20 @@
-import React from 'react';
-import { Box } from '@mui/material';
+import React, { useState } from 'react';
+import { ButtonBase } from '@mui/material';
+import ChartModal from './ChartModal';
 import MyDualAxesMemo from './MyDualAxesMemo';
 
 const Chart = ({ rowData }) => {
-	// const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 
-	// const modalPopUpHabdler = () => setIsOpen(!isOpen);
+	const modalPopUpHabdler = () => setIsOpen(!isOpen);
 
 	return (
-		<Box sx={{ width: '100%' }}>
-			<MyDualAxesMemo rowData={rowData} height={'125px'} isLabel={false} />
-			{/* <ChartModal isOpen={isOpen} setIsOpen={setIsOpen} rowData={rowData} /> */}
-		</Box>
+		<ButtonBase
+			onClick={modalPopUpHabdler}
+			sx={{ width: '100%', cursor: 'pointer' }}>
+			<MyDualAxesMemo rowData={rowData} height={'125px'} />
+			<ChartModal isOpen={isOpen} setIsOpen={setIsOpen} rowData={rowData} />
+		</ButtonBase>
 	);
 };
 
