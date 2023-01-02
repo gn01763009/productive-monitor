@@ -16,14 +16,16 @@ const getChartData = (rowData) => {
 };
 
 const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
-	console.log('rowData', rowData);
 	const chartData = useMemo(() => getChartData(rowData), [rowData]);
+	const label = isLabel ? {} : null;
 	const config = {
 		data: [chartData, chartData],
 		xField: 'time',
 		yField: ['PRD_QT', 'EXP_QT'],
 		yAxis: {
-			PRD_QT: {},
+			PRD_QT: {
+				label,
+			},
 			EXP_QT: {},
 		},
 		legend: !isLegend
@@ -83,13 +85,13 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 				smooth: true,
 			},
 		],
+		animation: {
+      appear: {
+        animation: 'path-in',
+        duration: 3000,
+      },
+    },
 	};
-
-	if (!isLabel) {
-		console.log('config', config);
-		config.yAxis['PRD_QT'].label = null;
-		config.yAxis['EXP_QT'].label = null;
-	}
 
 	return (
 		<Box
