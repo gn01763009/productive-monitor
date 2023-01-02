@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react';
 import { DualAxes } from '@ant-design/plots';
 import { Box } from '@mui/material';
+import moment from 'moment';
 
 const getChartData = (rowData) => {
 	const chartData = [];
 	rowData.forEach((row) => {
 		chartData.push({
-			time: row.EFF_DT.slice(5, 10),
+			time: moment(row.EFF_DT).format("MM-DD"),
 			PRD_QT: row.PRD_QT,
 			EXP_QT: row.EXP_QT,
 		});
@@ -31,13 +32,13 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 					custom: true,
 					items: [
 						{
-							name: 'value',
+							name: 'Productivity',
 							marker: {
 								symbol: 'square',
 							},
 						},
 						{
-							name: 'count',
+							name: 'Expectation',
 							marker: {
 								symbol: 'hyphen',
 								style: {
@@ -46,7 +47,7 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 							},
 						},
 					],
-			  },
+			},
 		tooltip: {
 			itemTpl:
 				"<li class='custom-tooltip-marker-for-{name}'><span style='width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;'></span>{name}: {value}</li>",
@@ -54,6 +55,19 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 				'g2-tooltip-list': {
 					paddingBottom: '8px',
 				},
+			},
+			customItems: (originalItems) => {
+				let customItems = originalItems;
+				const EXP_QT = originalItems[0].data['EXP_QT'];
+				const PRD_QT = originalItems[0].data['PRD_QT'];
+				const percentageHandler = (arg1, arg2 = 1) => {
+					const num = arg1 / arg2;
+					const answer = Math.round(num * 1000) / 10 + "%";
+					if(!arg2) return "none";
+					return arg1 < arg2 ? `(${answer})` : answer;
+				};
+				customItems.push({...originalItems[0], name: 'CMT', value: percentageHandler(PRD_QT,EXP_QT)})
+				return originalItems;
 			},
 		},
 		geometryOptions: [

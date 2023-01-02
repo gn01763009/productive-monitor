@@ -6,9 +6,9 @@ import { originData } from './assets/data';
 import moment from 'moment';
 
 //components
-import Header from './components/Header';
+import HeaderMemo from './components/HeaderMemo';
 import Content from './components/Content';
-import NavBar from './components/NavBar';
+import NavBarMemo from './components/NavBarMemo';
 import Loading from './components/Loading';
 import Highlights from './components/Highlights';
 
@@ -16,13 +16,11 @@ const theme = createTheme({ ...themeOptions });
 
 const initDates = (data) => {
   let dates = [];
-  console.log('data', data);
   data.forEach((ele) => {
     if (dates.find((date) => date === moment(ele.EFF_DT).format('YYYY-MM-DD')))
       return;
     dates.push(moment(ele.EFF_DT).format('YYYY-MM-DD'));
   });
-  console.log('dates', dates);
   return dates;
 };
 
@@ -50,38 +48,40 @@ function App() {
   const [dates, setDates] = useState({});
   const [loading, setLoading] = useState(true);
   const [groupData, setGroupData] = useState(null);
+  const [isMulti, setIsMulti] = useState(true);
+  const [dataType, setDataType] = useState("");
 
   useEffect(() => {
     //fetching API data
-    setData(originData);
+    setData(getGroups(originData));
     setDates(initDates(originData));
     //categorizing by groups
     setGroupData(getGroups(originData));
     setLoading(false);
   }, []);
 
-	return (
-		<div className='App'>
-			<ThemeProvider theme={theme}>
-				<Container
-					sx={{
-						backgroundColor: (theme) => theme.palette.background.default,
-						px: 0,
-					}}>
-					{!loading ? (
-						<>
-							<Header />
-							<Highlights groupData={groupData} />
-							<Content groupData={groupData} dates={dates} />
-							<NavBar originData={data} dates={dates} />
-						</>
-					) : (
+  return (
+    <div className='App'>
+      <ThemeProvider theme={theme}>
+        <Container
+          sx={{
+            backgroundColor: (theme) => theme.palette.background.default,
+            px: 0,
+          }}>
+          {!loading ? (
+            <>
+              <HeaderMemo />
+              <Highlights data={data} />
+              <Content groupData={groupData} dates={dates} isMulti={isMulti} dataType={dataType} />
+              <NavBarMemo groupData={groupData} setGroupData={setGroupData} data={data} setIsMulti={setIsMulti} setDataType={setDataType} dates={dates} />
+            </>
+          ) : (
             <Loading />
-					)}
-				</Container>
-			</ThemeProvider>
-		</div>
-	);
+          )}
+        </Container>
+      </ThemeProvider>
+    </div>
+  );
 }
 
 export default App;

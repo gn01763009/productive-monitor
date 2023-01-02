@@ -1,4 +1,4 @@
-import { Box, Modal, Typography, useMediaQuery } from '@mui/material';
+import { Box, Divider, Modal, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
 import { underFobText, underIdText } from '../../Content';
 import MyDualAxesMemo from '../MyDualAxesMemo';
@@ -18,8 +18,7 @@ const style = {
 };
 
 const getProductivity = (PRD_QT, EXP_QT) => {
-	const answer = (PRD_QT / EXP_QT) * 100;
-	return answer;
+	return (PRD_QT / EXP_QT) * 100;
 };
 
 const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
@@ -74,6 +73,10 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 							color: 'white',
 						}}>
 						<Typography variant='body1' fontSize={'12px'}>
+							{"CMT"}
+						</Typography>
+						<Divider variant="middle" sx={{backgroundColor: (theme) => theme.palette.background.default, mb:1}} />
+						<Typography variant='body1' fontSize={'12px'}>
 							{rowData[rowData.length - 1].CMT_MY.toFixed(2)}
 						</Typography>
 						<Typography
@@ -106,6 +109,10 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 							mt: '15px',
 							color: 'white',
 						}}>
+						<Typography variant='body1' fontSize={'12px'}>
+							{"FOB/QTY"}
+						</Typography>
+						<Divider variant="middle" sx={{backgroundColor: (theme) => theme.palette.background.default, mb:1}} />
 						<Typography variant='body1' fontSize={'12px'}>
 							{rowData[rowData.length - 1].FOB_MY.toFixed(2)}
 						</Typography>
