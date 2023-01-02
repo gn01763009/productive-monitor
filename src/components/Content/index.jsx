@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import React from 'react';
+import React, { useMemo } from 'react';
 import DataTable from 'react-data-table-component';
 import ChartMemo from '../ChartMemo';
 import BackgroundColorText from './BackgroundColorText';
@@ -30,8 +30,8 @@ const tableCustomStyles = {
 export const underIdText = 'DV9340';
 export const underFobText = 169;
 
-const Content = ({ groupData, dates }) => {
-	let groupName = Object.keys(groupData);
+const Content = ({ groupData, dates, isMulit, dataType }) => {
+	const groupNames = useMemo(() => Object.keys(groupData), [groupData]);
 
 	const columns = [
 		{
@@ -50,7 +50,7 @@ const Content = ({ groupData, dates }) => {
 			name: 'Trend',
 			minWidth: '180px',
 			center: true,
-			cell: (group) => <ChartMemo rowData={groupData[group]} />,
+			cell: (group) => <ChartMemo rowData={groupData[group]} isMulit={isMulit} dataType={dataType} />,
 		},
 		{
 			name: 'CMT',
@@ -93,7 +93,7 @@ const Content = ({ groupData, dates }) => {
 		<div>
 			<DataTable
 				columns={columns}
-				data={groupName}
+				data={groupNames}
 				customStyles={tableCustomStyles}
 			/>
 		</div>

@@ -66,10 +66,10 @@ const highlightDataReducer = (state, action) => {
 	}
 };
 
-const getCompletedCount = (data, groupName) => {
+const getCompletedCount = (data, groupNames) => {
 	let completedCount = 0;
-	groupName.forEach((groupName) => {
-		let rowData = data[groupName];
+	groupNames.forEach((groupNames) => {
+		let rowData = data[groupNames];
 		let newestData = rowData[rowData.length - 1];
 		if (newestData.PRD_QT / newestData.EXP_QT >= 1) {
 			completedCount++;
@@ -79,26 +79,26 @@ const getCompletedCount = (data, groupName) => {
 	return payload;
 };
 
-const getBestGroup = (data, groupName) => {
+const getBestGroup = (data, groupNames) => {
 	let score = null;
 	let bestGroup;
-	groupName.forEach((groupName) => {
-		let rowData = data[groupName];
+	groupNames.forEach((groupNames) => {
+		let rowData = data[groupNames];
 		let newestData = rowData[rowData.length - 1];
 		if (newestData.PRD_QT / newestData.EXP_QT >= score) {
 			score = newestData.PRD_QT / newestData.EXP_QT;
-			bestGroup = groupName;
+			bestGroup = groupNames;
 		}
 	});
 	let payload = { result: bestGroup, id: 'best_grp' };
 	return payload;
 };
 
-const getTotalProductive = (data, groupName) => {
+const getTotalProductive = (data, groupNames) => {
 	let sum_PRD_QT = 0;
 	let sum_EXP_QT = 0;
-	groupName.forEach((groupName) => {
-		let rowData = data[groupName];
+	groupNames.forEach((groupNames) => {
+		let rowData = data[groupNames];
 		let newestData = rowData[rowData.length - 1];
 		sum_PRD_QT = sum_PRD_QT + newestData.PRD_QT;
 		sum_EXP_QT = sum_EXP_QT + newestData.EXP_QT;
@@ -108,30 +108,30 @@ const getTotalProductive = (data, groupName) => {
 	return payload;
 };
 
-const Highlights = ({ groupData }) => {
+const Highlights = ({ data }) => {
 	const [state, dispatch] = useReducer(
 		highlightDataReducer,
 		initialHighlightData
 	);
 
 	useEffect(() => {
-		let groupName = Object.keys(groupData);
+		let groupNames = Object.keys(data);
 		dispatch({
 			type: 'UPDATE_STATE',
 			payload: [
 				{
-					result: groupName.length,
+					result: groupNames.length,
 					id: 't_grps',
 				},
-				getCompletedCount(groupData, groupName),
-				getBestGroup(groupData, groupName),
-				getTotalProductive(groupData, groupName),
+				getCompletedCount(data, groupNames),
+				getBestGroup(data, groupNames),
+				getTotalProductive(data, groupNames),
 			],
 		});
-		// 	totalGroup: groupName.length,
-		// 	assignmentTurnedIn: getCompletedCount(groupData, groupName),
-		// 	bestGroup: getBestGroup(groupData, groupName),
-		// 	totalProductive: getTotalProductive(groupData, groupName),
+		// 	totalGroup: groupNames.length,
+		// 	assignmentTurnedIn: getCompletedCount(data, groupNames),
+		// 	bestGroup: getBestGroup(data, groupNames),
+		// 	totalProductive: getTotalProductive(data, groupNames),
 		// }})
 	}, []);
 
