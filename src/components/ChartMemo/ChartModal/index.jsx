@@ -73,9 +73,16 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 							color: 'white',
 						}}>
 						<Typography variant='body1' fontSize={'12px'}>
-							{"CMT"}
+							{'CMT'}
 						</Typography>
-						<Divider variant="middle" sx={{backgroundColor: (theme) => theme.palette.background.default, mb:1}} />
+						<Divider
+							variant='middle'
+							sx={{
+								backgroundColor: (theme) => theme.palette.background.default,
+								mb: 0.5,
+								mt: 0.5,
+							}}
+						/>
 						<Typography variant='body1' fontSize={'12px'}>
 							{rowData[rowData.length - 1].CMT_MY.toFixed(2)}
 						</Typography>
@@ -110,9 +117,16 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 							color: 'white',
 						}}>
 						<Typography variant='body1' fontSize={'12px'}>
-							{"FOB/QTY"}
+							{'FOB/QTY'}
 						</Typography>
-						<Divider variant="middle" sx={{backgroundColor: (theme) => theme.palette.background.default, mb:1}} />
+						<Divider
+							variant='middle'
+							sx={{
+								backgroundColor: (theme) => theme.palette.background.default,
+								mb: 0.5,
+								mt: 0.5,
+							}}
+						/>
 						<Typography variant='body1' fontSize={'12px'}>
 							{rowData[rowData.length - 1].FOB_MY.toFixed(2)}
 						</Typography>
