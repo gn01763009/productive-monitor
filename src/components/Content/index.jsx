@@ -62,6 +62,7 @@ const tableCustomStyles = {
 			marginBottom: '5px !important',
 			borderBottomWidth: '0 !important',
 			borderRadius: '8px',
+			transition: '',
 			'@media (min-width: 392px)': {
 				marginBottom: '15px !important',
 			},
@@ -77,22 +78,31 @@ const tableCustomStyles = {
 	},
 };
 
+const conditionalRowStyles = [
+	{
+		when: row => true,
+		style: row => {
+			return { transition: `all 0s ease ${row.idx}s`,}
+		},
+	}
+]
+
 export const underIdText = 'DV9340';
 export const underFobText = 169;
 
 const Content = ({ groupData, dates, isMulti, dataType }) => {
 	const groupNames = useMemo(() => Object.keys(groupData), [groupData]);
+	const groupFirst = useMemo(() => (groupNames.map(((groupName, idx) => ({idx, groupName})))), [groupData]);
 
 	const columns = [
 		{
 			name: 'Group',
 			minWidth: '50px',
 			center: true,
-			sortable: true,
-			selector: (group) => group,
+			selector: (group) => group.groupName,
 			cell: (group) => (
 				<div>
-					<div style={{ fontSize: '20px' }}>{group}</div>
+					<div style={{ fontSize: '20px' }}>{group.groupName}</div>
 					<div style={{ marginTop: '4px' }}>{underIdText}</div>
 				</div>
 			),
@@ -103,8 +113,8 @@ const Content = ({ groupData, dates, isMulti, dataType }) => {
 			center: true,
 			cell: (group) => (
 				<ChartMemo
-					rowData={groupData[group]}
-					isMulit={isMulit}
+					rowData={groupData[group.groupName]}
+					isMulti={isMulti}
 					dataType={dataType}
 				/>
 			),
@@ -116,21 +126,21 @@ const Content = ({ groupData, dates, isMulti, dataType }) => {
 			sortable: true,
 			// selector: (group) => groupData[group][groupData[group].length - 1].CMT_MY,
 			selector: (group) =>
-				groupData[group][groupData[group].length - 1].PRD_QT /
-				groupData[group][groupData[group].length - 1].EXP_QT,
+				groupData[group.groupName][groupData[group.groupName].length - 1].PRD_QT /
+				groupData[group.groupName][groupData[group.groupName].length - 1].EXP_QT,
 			cell: (group) => (
 				<div>
 					<div style={{ fontSize: '12px' }}>
 						{Math.round(
-							groupData[group][groupData[group].length - 1].CMT_MY * 1000
+							groupData[group.groupName][groupData[group.groupName].length - 1].CMT_MY * 1000
 						) / 1000}
 					</div>
 					<BackgroundColorText
-						prd={groupData[group][groupData[group].length - 1].PRD_QT}
-						exp={groupData[group][groupData[group].length - 1].EXP_QT}>
+						prd={groupData[group.groupName][groupData[group.groupName].length - 1].PRD_QT}
+						exp={groupData[group.groupName][groupData[group.groupName].length - 1].EXP_QT}>
 						{percentageHandler(
-							groupData[group][groupData[group].length - 1].PRD_QT,
-							groupData[group][groupData[group].length - 1].EXP_QT
+							groupData[group.groupName][groupData[group.groupName].length - 1].PRD_QT,
+							groupData[group.groupName][groupData[group.groupName].length - 1].EXP_QT
 						)}
 					</BackgroundColorText>
 				</div>
@@ -141,12 +151,12 @@ const Content = ({ groupData, dates, isMulti, dataType }) => {
 			minWidth: '78px',
 			center: true,
 			sortable: true,
-			selector: (group) => groupData[group][groupData[group].length - 1].FOB_MY,
+			selector: (group) => groupData[group.groupName][groupData[group.groupName].length - 1].FOB_MY,
 			cell: (group) => (
 				<div style={{ borderBottomRightRadius: '8px !important' }}>
 					<div>
 						{Math.round(
-							groupData[group][groupData[group].length - 1].FOB_MY * 1000
+							groupData[group.groupName][groupData[group.groupName].length - 1].FOB_MY * 1000
 						) / 1000}
 					</div>
 					<div style={{ marginTop: '4px' }}>{underFobText}</div>
@@ -163,8 +173,9 @@ const Content = ({ groupData, dates, isMulti, dataType }) => {
 			}}>
 			<DataTable
 				columns={columns}
-				data={groupNames}
+				data={groupFirst}
 				customStyles={tableCustomStyles}
+				conditionalRowStyles={conditionalRowStyles}
 			/>
 		</Box>
 	);
