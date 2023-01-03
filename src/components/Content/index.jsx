@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import DataTable from 'react-data-table-component';
 import ChartMemo from '../ChartMemo';
 import BackgroundColorText from './BackgroundColorText';
+import { css, keyframes } from '@emotion/react';
 
 const percentageHandler = (arg1, arg2 = 1) => {
 	const num = arg1 / arg2;
@@ -35,17 +36,17 @@ const tableCustomStyles = {
 		style: {
 			marginBottom: '5px !important',
 			borderBottomWidth: '0 !important',
-			borderRadius: '8px',
 			'@media (min-width: 392px)': {
 				marginBottom: '15px !important',
-			},
-			'& div:nth-child(1)': {
-				borderTopLeftRadius: '8px',
-				borderBottomLeftRadius: '8px',
-			},
-			'& div:nth-child(4)': {
-				borderTopRightRadius: '8px',
-				borderBottomRightRadius: '8px',
+				borderRadius: '8px',
+				'& div:nth-child(1)': {
+					borderTopLeftRadius: '8px',
+					borderBottomLeftRadius: '8px',
+				},
+				'& div:nth-child(4)': {
+					borderTopRightRadius: '8px',
+					borderBottomRightRadius: '8px',
+				},
 			},
 		},
 	},
@@ -61,18 +62,18 @@ const tableCustomStyles = {
 		style: {
 			marginBottom: '5px !important',
 			borderBottomWidth: '0 !important',
-			borderRadius: '8px',
 			transition: '',
 			'@media (min-width: 392px)': {
 				marginBottom: '15px !important',
-			},
-			'& div:nth-child(1)': {
-				borderTopLeftRadius: '8px',
-				borderBottomLeftRadius: '8px',
-			},
-			'& div:nth-child(4)': {
-				borderTopRightRadius: '8px',
-				borderBottomRightRadius: '8px',
+				borderRadius: '8px',
+				'& div:nth-child(1)': {
+					borderTopLeftRadius: '8px',
+					borderBottomLeftRadius: '8px',
+				},
+				'& div:nth-child(4)': {
+					borderTopRightRadius: '8px',
+					borderBottomRightRadius: '8px',
+				},
 			},
 		},
 	},
@@ -80,19 +81,25 @@ const tableCustomStyles = {
 
 const conditionalRowStyles = [
 	{
-		when: row => true,
-		style: row => {
-			return { transition: `all 0s ease ${row.idx}s`,}
+		when: (row) => true,
+		style: (row) => {
+			return {
+				animationName: `fadeIn`,
+				animationDuration: `${row.idx * 750}ms`,
+			};
 		},
-	}
-]
+	},
+];
 
 export const underIdText = 'DV9340';
 export const underFobText = 169;
 
 const Content = ({ groupData, dates, isMulti, dataType }) => {
 	const groupNames = useMemo(() => Object.keys(groupData), [groupData]);
-	const groupFirst = useMemo(() => (groupNames.map(((groupName, idx) => ({idx, groupName})))), [groupData]);
+	const groupFirst = useMemo(
+		() => groupNames.map((groupName, idx) => ({ idx, groupName })),
+		[groupData]
+	);
 
 	const columns = [
 		{
@@ -126,21 +133,32 @@ const Content = ({ groupData, dates, isMulti, dataType }) => {
 			sortable: true,
 			// selector: (group) => groupData[group][groupData[group].length - 1].CMT_MY,
 			selector: (group) =>
-				groupData[group.groupName][groupData[group.groupName].length - 1].PRD_QT /
-				groupData[group.groupName][groupData[group.groupName].length - 1].EXP_QT,
+				groupData[group.groupName][groupData[group.groupName].length - 1]
+					.PRD_QT /
+				groupData[group.groupName][groupData[group.groupName].length - 1]
+					.EXP_QT,
 			cell: (group) => (
 				<div>
 					<div style={{ fontSize: '12px' }}>
 						{Math.round(
-							groupData[group.groupName][groupData[group.groupName].length - 1].CMT_MY * 1000
+							groupData[group.groupName][groupData[group.groupName].length - 1]
+								.CMT_MY * 1000
 						) / 1000}
 					</div>
 					<BackgroundColorText
-						prd={groupData[group.groupName][groupData[group.groupName].length - 1].PRD_QT}
-						exp={groupData[group.groupName][groupData[group.groupName].length - 1].EXP_QT}>
+						prd={
+							groupData[group.groupName][groupData[group.groupName].length - 1]
+								.PRD_QT
+						}
+						exp={
+							groupData[group.groupName][groupData[group.groupName].length - 1]
+								.EXP_QT
+						}>
 						{percentageHandler(
-							groupData[group.groupName][groupData[group.groupName].length - 1].PRD_QT,
-							groupData[group.groupName][groupData[group.groupName].length - 1].EXP_QT
+							groupData[group.groupName][groupData[group.groupName].length - 1]
+								.PRD_QT,
+							groupData[group.groupName][groupData[group.groupName].length - 1]
+								.EXP_QT
 						)}
 					</BackgroundColorText>
 				</div>
@@ -151,12 +169,15 @@ const Content = ({ groupData, dates, isMulti, dataType }) => {
 			minWidth: '78px',
 			center: true,
 			sortable: true,
-			selector: (group) => groupData[group.groupName][groupData[group.groupName].length - 1].FOB_MY,
+			selector: (group) =>
+				groupData[group.groupName][groupData[group.groupName].length - 1]
+					.FOB_MY,
 			cell: (group) => (
 				<div style={{ borderBottomRightRadius: '8px !important' }}>
 					<div>
 						{Math.round(
-							groupData[group.groupName][groupData[group.groupName].length - 1].FOB_MY * 1000
+							groupData[group.groupName][groupData[group.groupName].length - 1]
+								.FOB_MY * 1000
 						) / 1000}
 					</div>
 					<div style={{ marginTop: '4px' }}>{underFobText}</div>
@@ -171,6 +192,16 @@ const Content = ({ groupData, dates, isMulti, dataType }) => {
 				mt: '20px',
 				mb: '48px',
 			}}>
+			<style>
+				{`@keyframes fadeIn {
+				0% {
+					opacity: 0;
+				} 
+				100% {
+					opacity: 1;
+				}
+			}`}
+			</style>
 			<DataTable
 				columns={columns}
 				data={groupFirst}
