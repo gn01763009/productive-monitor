@@ -4,12 +4,11 @@ import DataTable from 'react-data-table-component';
 import ChartMemo from '../ChartMemo';
 import BackgroundColorText from './BackgroundColorText';
 
-const percentageHandler = (arg1, arg2 = 1) => {
-	const num = arg1 / arg2;
-	if (isNaN(num)) {
-		return '－－';
+const percentageHandler = (arg1) => {
+	if (!arg1) {
+		return '- -';
 	}
-	return Math.round(num * 1000) / 10 + '%';
+	return arg1;
 };
 
 const tableCustomStyles = {
@@ -153,7 +152,7 @@ const Content = ({ groupData, isMulti, dataType }) => {
 							groupData[group.groupName][groupData[group.groupName].length - 1]
 								.EXP_QT
 						}>
-						{(group.EFF * 10).toFixed(1)  + "%"}
+						{percentageHandler(group.EFF)+ "%"}
 					</BackgroundColorText>
 				</div>
 			),
