@@ -80,7 +80,7 @@ const tableCustomStyles = {
 export const underIdText = 'DV9340';
 export const underFobText = 169;
 
-const Content = ({ groupData, dates, isMulit, dataType }) => {
+const Content = ({ groupData, dates, isMulti, dataType }) => {
 	const groupNames = useMemo(() => Object.keys(groupData), [groupData]);
 
 	const columns = [
@@ -88,6 +88,7 @@ const Content = ({ groupData, dates, isMulit, dataType }) => {
 			name: 'Group',
 			minWidth: '50px',
 			center: true,
+			sortable: true,
 			selector: (group) => group,
 			cell: (group) => (
 				<div>

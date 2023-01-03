@@ -34,11 +34,16 @@ const initDates = (data) => {
 const getGroups = (originData) => {
   let groups = [];
   originData.forEach((rowData) => {
+    const groupData = {
+      ...rowData,
+      "CMT_P": Math.round((rowData["CMT_MY"] / rowData["EMP_QT"] / rowData["WRK_HR"]) * 1000) / 1000,
+      "CMT_G": Math.round((rowData["CMT_MY"] / rowData["WRK_HR"]) * 1000) / 1000,
+    }
     if (!groups[rowData.GRP_ID]) {
-      groups[rowData.GRP_ID] = [rowData];
+      groups[rowData.GRP_ID] = [groupData];
       return;
     }
-    groups[rowData.GRP_ID].push(rowData);
+    groups[rowData.GRP_ID].push(groupData);
   });
   return groups;
 };

@@ -67,12 +67,10 @@ const NavBar = ({groupData, setGroupData, data, setIsMulti, setDataType, dates})
   };
 
   const clickCmtHandler = (type) => {
-    let newData = {};
     let dataType = "";
     switch (type) {
-      case "default":
+      case "PRO/EXP":
         setIsMulti(true);
-        setGroupData(data);
         return;
       case "person":
         dataType = "CMT_P";
@@ -83,26 +81,11 @@ const NavBar = ({groupData, setGroupData, data, setIsMulti, setDataType, dates})
     }
     setIsMulti(false);
     setDataType(dataType);
-    groupNames.map(groupName => {
-      newData = {...newData, [groupName]: groupData[groupName].map(ele=> {
-        let data = 0;
-        if(dataType === "CMT_P"){
-          data = ele["CMT_MY"] / ele["EMP_QT"] / ele["WRK_HR"];
-        } else {
-          data = ele["CMT_MY"] / ele["WRK_HR"];
-        }
-        return {
-          ...ele,
-          [dataType]: Math.round(data * 1000) / 1000,
-        }
-      })}
-    })
-    setGroupData(newData);
   };
 
   const clickFobHandler = () => {
     setIsMulti(false);
-    setDataType("FOB");
+    setDataType("FOB_MY");
   };
 
   return (
@@ -174,7 +157,7 @@ const NavBar = ({groupData, setGroupData, data, setIsMulti, setDataType, dates})
           onClose={handleClose}
           >
           <MenuBar title={"CMT"} customStyles={{color: 'white',width: '300px', border: 'none', boxShadow: 'none'}} >
-          <Chip sx={Customechip} label="Default" onClick={(e)=> clickCmtHandler("default")} clickable/>
+          <Chip sx={Customechip} label="PRO/EXP" onClick={(e)=> clickCmtHandler("PRO/EXP")} clickable/>
           <Chip sx={Customechip} label="Person" onClick={(e)=> clickCmtHandler("person")} clickable/>
           <Chip sx={Customechip} label="Group" onClick={(e)=> clickCmtHandler("group")} clickable/>
           </MenuBar>

@@ -2,6 +2,7 @@ import { Box, Divider, Modal, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
 import { underFobText, underIdText } from '../../Content';
 import MyDualAxesMemo from '../MyDualAxesMemo';
+import MyAxesMemo from '../MyAxesMemo';
 
 const style = {
 	position: 'absolute',
@@ -21,7 +22,7 @@ const getProductivity = (PRD_QT, EXP_QT) => {
 	return (PRD_QT / EXP_QT) * 100;
 };
 
-const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
+const ChartModal = ({ isOpen, setIsOpen, rowData, isMulti, dataType }) => {
 	const modalCloseHandler = () => setIsOpen(!isOpen);
 	const matches = useMediaQuery('(min-width:392px)');
 
@@ -57,13 +58,23 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 						}}>
 						{underIdText}
 					</Typography>
-					<MyDualAxesMemo
-						rowData={rowData}
-						width={matches ? '690px' : '322px'}
-						height='150px'
-						isLegend={true}
-						isLabel={true}
-					/>
+					{isMulti ? 
+						<MyDualAxesMemo 
+							rowData={rowData}
+							width={matches ? '690px' : '322px'}
+							height='150px'
+							isLegend={true}
+							isLabel={true}
+						/> : 
+						<MyAxesMemo 
+							rowData={rowData}
+							dataType={dataType}
+							width={matches ? '690px' : '322px'}
+							height='150px'
+							isLegend={true}
+							isLabel={true}
+						/>
+					}
 					<Box
 						sx={{
 							display: 'inline-block',
