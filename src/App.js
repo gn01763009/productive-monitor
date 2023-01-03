@@ -36,6 +36,7 @@ const getGroups = (originData) => {
   originData.forEach(rowData => {
     const groupData = {
       ...rowData,
+      "EFF": Math.round((rowData["PRD_QT"] / rowData["EXP_QT"]) * 1000) / 10,
       "CMT_P": Math.round((rowData["CMT_MY"] / rowData["EMP_QT"] / rowData["WRK_HR"]) * 1000) / 1000,
       "CMT_G": Math.round((rowData["CMT_MY"] / rowData["WRK_HR"]) * 1000) / 1000,
     }
@@ -56,6 +57,7 @@ const get20DGroups = (originData) => {
     if (total >= 10) return;
     const groupData = {
       ...rowData,
+      "EFF": Math.round((rowData["PRD_QT"] / rowData["EXP_QT"]) * 1000) / 100,
       "CMT_P": Math.round((rowData["CMT_MY"] / rowData["EMP_QT"] / rowData["WRK_HR"]) * 1000) / 1000,
       "CMT_G": Math.round((rowData["CMT_MY"] / rowData["WRK_HR"]) * 1000) / 1000,
     }
