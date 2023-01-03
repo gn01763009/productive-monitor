@@ -33,7 +33,7 @@ const initDates = (data) => {
 
 const getGroups = (originData) => {
   let groups = [];
-  originData.forEach((rowData) => {
+  originData.forEach(rowData => {
     const groupData = {
       ...rowData,
       "CMT_P": Math.round((rowData["CMT_MY"] / rowData["EMP_QT"] / rowData["WRK_HR"]) * 1000) / 1000,
@@ -44,6 +44,29 @@ const getGroups = (originData) => {
       return;
     }
     groups[rowData.GRP_ID].push(groupData);
+  });
+  return groups;
+};
+
+const get20DGroups = (originData) => {
+  let groups = [];
+  let total = 100;
+  originData.forEach(rowData => {
+    total--;
+    if (total >= 10) return;
+    const groupData = {
+      ...rowData,
+      "CMT_P": Math.round((rowData["CMT_MY"] / rowData["EMP_QT"] / rowData["WRK_HR"]) * 1000) / 1000,
+      "CMT_G": Math.round((rowData["CMT_MY"] / rowData["WRK_HR"]) * 1000) / 1000,
+    }
+    if (!groups[rowData.GRP_ID]) {
+      groups[rowData.GRP_ID] = [groupData];
+      return;
+    }
+    groups[rowData.GRP_ID].push(groupData);
+    if (total === 0) {
+      return total = 100;
+    }
   });
   return groups;
 };
@@ -61,8 +84,8 @@ function App() {
     setData(getGroups(originData));
     setDates(initDates(originData));
     //categorizing by groups
-    setGroupData(getGroups(originData));
-    setLoading(false);
+    setGroupData(get20DGroups(originData));
+    return setLoading(false);
   }, []);
 
   return (

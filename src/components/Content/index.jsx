@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import DataTable from 'react-data-table-component';
 import ChartMemo from '../ChartMemo';
 import BackgroundColorText from './BackgroundColorText';
-import { css, keyframes } from '@emotion/react';
 
 const percentageHandler = (arg1, arg2 = 1) => {
 	const num = arg1 / arg2;
@@ -84,8 +83,10 @@ const conditionalRowStyles = [
 		when: (row) => true,
 		style: (row) => {
 			return {
-				animationName: `fadeIn`,
-				animationDuration: `${row.idx * 750}ms`,
+				// animation: `fadeInUp .3s ease-in-out ${row.idx * 300}ms forwards`
+				animationName: `fadeInUp`,
+				animationDuration: `800ms`,
+				animationDelay: `${row.idx * 100}ms`,
 			};
 		},
 	},
@@ -94,18 +95,16 @@ const conditionalRowStyles = [
 export const underIdText = 'DV9340';
 export const underFobText = 169;
 
-const Content = ({ groupData, dates, isMulti, dataType }) => {
+const Content = ({ groupData, isMulti, dataType }) => {
 	const groupNames = useMemo(() => Object.keys(groupData), [groupData]);
-	const groupFirst = useMemo(
-		() => groupNames.map((groupName, idx) => ({ idx, groupName })),
-		[groupData]
-	);
+	const groupFirst = useMemo(() => groupNames.map((groupName, idx) => ({ idx, groupName })),[groupData]);
 
 	const columns = [
 		{
 			name: 'Group',
 			minWidth: '50px',
 			center: true,
+			sortable: true,
 			selector: (group) => group.groupName,
 			cell: (group) => (
 				<div>
@@ -131,7 +130,6 @@ const Content = ({ groupData, dates, isMulti, dataType }) => {
 			minWidth: '40px',
 			center: true,
 			sortable: true,
-			// selector: (group) => groupData[group][groupData[group].length - 1].CMT_MY,
 			selector: (group) =>
 				groupData[group.groupName][groupData[group.groupName].length - 1]
 					.PRD_QT /
@@ -193,13 +191,17 @@ const Content = ({ groupData, dates, isMulti, dataType }) => {
 				mb: '48px',
 			}}>
 			<style>
-				{`@keyframes fadeIn {
-				0% {
-					opacity: 0;
-				} 
-				100% {
-					opacity: 1;
-				}
+				{`@keyframes fadeInUp {
+					from { 
+							opacity: 0;
+							-webkit-transform: translate3d(0, 100%, 0);
+							transform: translate3d(0, 100%, 0);
+					}
+					to {
+							opacity: 1;
+							-webkit-transform: none;
+							transform: none;
+					}
 			}`}
 			</style>
 			<DataTable
