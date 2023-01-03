@@ -7,7 +7,7 @@ const getChartData = (rowData) => {
 	const chartData = [];
 	rowData.forEach((row) => {
 		chartData.push({
-			time: moment(row.EFF_DT).format("MM-DD"),
+			time: moment(row.EFF_DT).format('MM-DD'),
 			PRD_QT: row.PRD_QT,
 			EXP_QT: row.EXP_QT,
 		});
@@ -49,7 +49,7 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 							},
 						},
 					],
-			},
+			  },
 		tooltip: {
 			itemTpl:
 				"<li class='custom-tooltip-marker-for-{name}'><span style='width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;'></span>{name}: {value}</li>",
@@ -64,11 +64,15 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 				const PRD_QT = originalItems[0].data['PRD_QT'];
 				const percentageHandler = (arg1, arg2 = 1) => {
 					const num = arg1 / arg2;
-					const answer = Math.round(num * 1000) / 10 + "%";
-					if(!arg2) return "none";
+					const answer = Math.round(num * 1000) / 10 + '%';
+					if (!arg2) return 'none';
 					return arg1 < arg2 ? `(${answer})` : answer;
 				};
-				customItems.push({...originalItems[0], name: 'CMT', value: percentageHandler(PRD_QT,EXP_QT)})
+				customItems.push({
+					...originalItems[0],
+					name: 'CMT',
+					value: percentageHandler(PRD_QT, EXP_QT),
+				});
 				return originalItems;
 			},
 		},
@@ -98,7 +102,7 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 			sx={{
 				width: width ? width : '100%',
 				height: height,
-				py: '4px',
+				py: '8px',
 				'li.custom-tooltip-marker-for-PRD_QT > span': { background: '#6294F9' },
 				'li.custom-tooltip-marker-for-EXP_QT > span': { background: 'red' },
 			}}>

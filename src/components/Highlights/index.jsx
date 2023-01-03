@@ -147,6 +147,12 @@ const Highlights = ({ data }) => {
 				backgroundColor: 'rgba(0, 0, 0, 0.2)',
 				px: '20px',
 				boxSizing: 'border-box',
+				'&::-webkit-scrollbar': {
+					display: 'none',
+				},
+				'@media (min-width: 392px)': {
+					borderRadius: '8px',
+				},
 			}}>
 			<Box
 				sx={{
