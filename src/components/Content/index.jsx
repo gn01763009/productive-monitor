@@ -97,7 +97,15 @@ export const underFobText = 169;
 
 const Content = ({ groupData, isMulti, dataType }) => {
 	const groupNames = useMemo(() => Object.keys(groupData), [groupData]);
-	const groupFirst = useMemo(() => groupNames.map((groupName, idx) => ({ idx, groupName })),[groupData]);
+	const groupFirst = useMemo(() => groupNames.map((groupName, idx) => {
+		const data = groupData[groupName];
+		const EFF = data[data.length - 1]["EFF"] || 0;
+		return {
+			idx,
+			groupName,
+			EFF
+		};
+	}),[groupData]);
 
 	const columns = [
 		{
@@ -130,18 +138,11 @@ const Content = ({ groupData, isMulti, dataType }) => {
 			minWidth: '40px',
 			center: true,
 			sortable: true,
-			selector: (group) =>
-				groupData[group.groupName][groupData[group.groupName].length - 1]
-					.PRD_QT /
-				groupData[group.groupName][groupData[group.groupName].length - 1]
-					.EXP_QT,
+			selector: (group) =>(group.EFF),
 			cell: (group) => (
 				<div>
 					<div style={{ fontSize: '12px' }}>
-						{Math.round(
-							groupData[group.groupName][groupData[group.groupName].length - 1]
-								.CMT_MY * 1000
-						) / 1000}
+						{Math.round(groupData[group.groupName][groupData[group.groupName].length - 1].CMT_MY * 1000) / 1000}
 					</div>
 					<BackgroundColorText
 						prd={
@@ -152,12 +153,7 @@ const Content = ({ groupData, isMulti, dataType }) => {
 							groupData[group.groupName][groupData[group.groupName].length - 1]
 								.EXP_QT
 						}>
-						{percentageHandler(
-							groupData[group.groupName][groupData[group.groupName].length - 1]
-								.PRD_QT,
-							groupData[group.groupName][groupData[group.groupName].length - 1]
-								.EXP_QT
-						)}
+						{(group.EFF * 10).toFixed(1)  + "%"}
 					</BackgroundColorText>
 				</div>
 			),
