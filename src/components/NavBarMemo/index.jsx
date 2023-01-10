@@ -59,9 +59,11 @@ const NavBar = ({groupData, setGroupData, data, setIsMulti, setDataType, dates})
       case "ALL":
         setGroupData(data);
         return;
+      default:
+        break;
     }
-    groupNames.map(groupName => {
-      newData = {...newData, [groupName]: data[groupName].filter(ele=> new Date(ele.EFF_DT).getTime() >= dateTime)}
+    groupNames.forEach(groupName => {
+      newData = {...newData, [groupName]: data[groupName].filter(ele => new Date(ele.EFF_DT).getTime() >= dateTime)}
     })
     setGroupData(newData);
   };
@@ -77,6 +79,8 @@ const NavBar = ({groupData, setGroupData, data, setIsMulti, setDataType, dates})
         break;
       case "group":
         dataType = "CMT_G";
+        break;
+      default:
         break;
     }
     setIsMulti(false);

@@ -2,7 +2,7 @@ import './App.css';
 import { Container, ThemeProvider, createTheme } from '@mui/material';
 import { themeOptions } from './assets/theme';
 import { useEffect, useState } from 'react';
-import { originData } from './assets/data';
+import useFetch from './hooks/useFetch';
 import moment from 'moment';
 
 //components
@@ -28,12 +28,13 @@ const initDates = (data) => {
 //   "A01": [
 //       {"SEQ_NO":"100","WEE_ID":2,"EFF_DT":"2022-07-18T00:00:00.000Z","WRK_HR":11,"GRP_ID":"A01","CMT_MY":5921.95,"FOB_MY":43979,"PRD_QT":85,"EXP_QT":42,"WRK_QQ":330.05499999999995,"EMP_QT":23,"EMP_QQ":35.3,"I_E_QT":2.27,"CMT_EXP":null},
 //       {"SEQ_NO":"100","WEE_ID":2,"EFF_DT":"2022-07-18T00:00:00.000Z","WRK_HR":11,"GRP_ID":"A01","CMT_MY":5921.95,"FOB_MY":43979,"PRD_QT":85,"EXP_QT":42,"WRK_QQ":330.05499999999995,"EMP_QT":23,"EMP_QQ":35.3,"I_E_QT":2.27,"CMT_EXP":null},
+//       {'SEQ_NO': 97, 'WEE_ID': 6, 'EFF_DT': '2022-09-16 00:00:00', 'WRK_HR': 11.0, 'GRP_ID': 'A01', 'STY_NO': 'NF0A3LGZ-B-SMU', 'STY_NO1': 'NF0A82RK-A-SMU', 'CMT_MY': 2533.99, 'FOB_MY': 45119.9, 'PRD_QT': 43, 'EXP_QT': 100, 'WRK_QQ': 345.216, 'EMP_QQ': 37.2, 'I_E_QT': 1.92, 'CMT_EXP': 6415.000000000001}
 //     ]
 // }
 
-const getGroups = (originData) => {
+const getGroups = (fecthData) => {
   let groups = [];
-  originData.forEach(rowData => {
+  fecthData.forEach(rowData => {
     const groupData = {
       ...rowData,
       "EFF": Math.round((rowData["PRD_QT"] / rowData["EXP_QT"]) * 1000) / 10,
@@ -49,12 +50,13 @@ const getGroups = (originData) => {
   return groups;
 };
 
-const get20DGroups = (originData) => {
+const get10DGroups = (fecthData) => {
   let groups = [];
-  let total = 100;
-  originData.forEach(rowData => {
-    total--;
-    if (total >= 10) return;
+  const total = fecthData.filter((ele) => (ele.GRP_ID === 'A01')).length;
+  let counter = total;
+  fecthData.forEach(rowData => {
+    counter--;
+    if (counter >= 10) return;
     const groupData = {
       ...rowData,
       "EFF": Math.round((rowData["PRD_QT"] / rowData["EXP_QT"]) * 1000) / 10,
@@ -66,8 +68,8 @@ const get20DGroups = (originData) => {
       return;
     }
     groups[rowData.GRP_ID].push(groupData);
-    if (total === 0) {
-      return total = 100;
+    if (counter === 0) {
+      return counter = total;
     }
   });
   return groups;
@@ -80,15 +82,19 @@ function App() {
   const [groupData, setGroupData] = useState(null);
   const [isMulti, setIsMulti] = useState(true);
   const [dataType, setDataType] = useState("");
+  const { fecthData, error } = useFetch('http://125.227.134.205/EAG_EFC/EXC.php');
 
   useEffect(() => {
+    if (!fecthData) return;
     //fetching API data
-    setData(getGroups(originData));
-    setDates(initDates(originData));
+    setData(getGroups(fecthData));
+    setDates(initDates(fecthData));
     //categorizing by groups
-    setGroupData(get20DGroups(originData));
+    setGroupData(get10DGroups(fecthData));
     return setLoading(false);
-  }, []);
+  }, [fecthData]);
+
+  if (error) return "error";
 
   return (
     <div className='App'>

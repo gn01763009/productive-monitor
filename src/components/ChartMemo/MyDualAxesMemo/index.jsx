@@ -49,7 +49,7 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 							},
 						},
 					],
-			  },
+			},
 		tooltip: {
 			itemTpl:
 				"<li class='custom-tooltip-marker-for-{name}'><span style='width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;'></span>{name}: {value}</li>",
