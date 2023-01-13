@@ -89,7 +89,7 @@ function App() {
   const [isMulti, setIsMulti] = useState(true);
   const [dataType, setDataType] = useState('');
   // const { fecthData, error } = useFetch('http://125.227.134.205/EAG_EFC/EXC.php');
-  const { fecthData, error } = useFetch('https://reurl.cc/OEKe0v');
+  const { fecthData, error } = useFetch('http://125.227.134.205/EAG_EFC/EXC.php');
 
   useEffect(() => {
     if (!fecthData) return;
