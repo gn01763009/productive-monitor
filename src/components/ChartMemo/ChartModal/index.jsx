@@ -1,7 +1,8 @@
-import { Box, Modal, Typography, useMediaQuery } from '@mui/material';
+import { Box, Divider, Modal, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
 import { underFobText, underIdText } from '../../Content';
 import MyDualAxesMemo from '../MyDualAxesMemo';
+import MyAxesMemo from '../MyAxesMemo';
 
 const style = {
 	position: 'absolute',
@@ -17,7 +18,11 @@ const style = {
 	boxShadow: '1px 4px 6px rgba(0, 0, 0, 0.25)',
 };
 
-const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
+const getProductivity = (PRD_QT, EXP_QT) => {
+	return (PRD_QT / EXP_QT) * 100;
+};
+
+const ChartModal = ({ isOpen, setIsOpen, rowData, isMulti, dataType }) => {
 	const modalCloseHandler = () => setIsOpen(!isOpen);
 	const matches = useMediaQuery('(min-width:392px)');
 
@@ -53,12 +58,23 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 						}}>
 						{underIdText}
 					</Typography>
-					<MyDualAxesMemo
-						rowData={rowData}
-						width={matches ? '690px' : '322px'}
-						height='150px'
-						isLegend={true}
-					/>
+					{isMulti ? 
+						<MyDualAxesMemo 
+							rowData={rowData}
+							width={matches ? '690px' : '322px'}
+							height='150px'
+							isLegend={true}
+							isLabel={true}
+						/> : 
+						<MyAxesMemo 
+							rowData={rowData}
+							dataType={dataType}
+							width={matches ? '690px' : '322px'}
+							height='150px'
+							isLegend={true}
+							isLabel={true}
+						/>
+					}
 					<Box
 						sx={{
 							display: 'inline-block',
@@ -68,15 +84,39 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 							color: 'white',
 						}}>
 						<Typography variant='body1' fontSize={'12px'}>
-							{rowData[rowData.length - 1].CMT_MY}
+							{'CMT'}
 						</Typography>
-						<Typography variant='body1' fontSize={'12px'} sx={{ mt: '4px' }}>
-							{(
-								rowData[rowData.length - 1].PRD_QT /
+						<Divider
+							variant='middle'
+							sx={{
+								backgroundColor: (theme) => theme.palette.background.default,
+								mb: 0.5,
+								mt: 0.5,
+							}}
+						/>
+						<Typography variant='body1' fontSize={'12px'}>
+							{rowData[rowData.length - 1].CMT_MY.toFixed(2)}
+						</Typography>
+						<Typography
+							variant='body1'
+							fontSize={'12px'}
+							sx={{
+								width: '50px',
+								mt: '4px',
+								ml: 'auto',
+								mr: 'auto',
+								backgroundColor:
+									getProductivity(
+										rowData[rowData.length - 1].PRD_QT,
+										rowData[rowData.length - 1].EXP_QT
+									) > 100
+										? '#0BC07A'
+										: 'red',
+							}}>
+							{getProductivity(
+								rowData[rowData.length - 1].PRD_QT,
 								rowData[rowData.length - 1].EXP_QT
-							).toFixed(2) *
-								100 +
-								'%'}
+							).toFixed(2) + '%'}
 						</Typography>
 					</Box>
 					<Box
@@ -87,6 +127,17 @@ const ChartModal = ({ isOpen, setIsOpen, rowData }) => {
 							mt: '15px',
 							color: 'white',
 						}}>
+						<Typography variant='body1' fontSize={'12px'}>
+							{'FOB/QTY'}
+						</Typography>
+						<Divider
+							variant='middle'
+							sx={{
+								backgroundColor: (theme) => theme.palette.background.default,
+								mb: 0.5,
+								mt: 0.5,
+							}}
+						/>
 						<Typography variant='body1' fontSize={'12px'}>
 							{rowData[rowData.length - 1].FOB_MY.toFixed(2)}
 						</Typography>

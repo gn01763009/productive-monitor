@@ -11,6 +11,7 @@
 .px-griditem{
   position: absolute;
   top: 50%;
+  left: 50%;
   transform: translateX(-16px);
 }
 
