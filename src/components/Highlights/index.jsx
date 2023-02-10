@@ -25,13 +25,6 @@ const initialHighlightData = [
 		id: 'best_grp',
 		isClick: false,
 	},
-	{
-		icon: 'functions',
-		num: null,
-		text: '總生產 %',
-		id: 't_prd',
-		isClick: false,
-	},
 ];
 
 const highlightDataReducer = (state, action) => {
@@ -53,13 +46,6 @@ const highlightDataReducer = (state, action) => {
 					}
 				});
 			});
-			// stateCopy.forEach(card => {
-			// 	if (card.id === id) {card.num = result};
-			// if (card.icon === 'group') {card.num = action.payload.totalGroup};
-			// if (card.icon === 'assignmentTurnedIn') {card.num = action.payload.assignmentTurnedIn};
-			// if (card.icon === 'emojiEvents') {card.num = action.payload.bestGroup};
-			// if (card.icon === 'functions') {card.num = action.payload.totalProductive};
-			// });
 			return stateCopy;
 		default:
 			return;
@@ -128,11 +114,6 @@ const Highlights = ({ data }) => {
 				getTotalProductive(data, groupNames),
 			],
 		});
-		// 	totalGroup: groupNames.length,
-		// 	assignmentTurnedIn: getCompletedCount(data, groupNames),
-		// 	bestGroup: getBestGroup(data, groupNames),
-		// 	totalProductive: getTotalProductive(data, groupNames),
-		// }})
 	}, []);
 
 	const clickHandler = (id) => {
@@ -159,7 +140,7 @@ const Highlights = ({ data }) => {
 					display: 'flex',
 					width: '684px',
 					height: '198px',
-					gap: '20px',
+					gap: '40px',
 					alignItems: 'center',
 					justifyContent: 'center',
 					overflowY: 'hidden',
@@ -170,7 +151,10 @@ const Highlights = ({ data }) => {
 						<CardActionArea
 							onClick={() => clickHandler(card.id)}
 							key={card.id}
-							sx={{ borderRadius: '10px' }}>
+							sx={{ 
+								borderRadius: '10px',
+								width: 'auto',
+							}}>
 							<Card
 								sx={{
 									width: 156,

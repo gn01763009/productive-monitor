@@ -1,6 +1,5 @@
 import { Box, Divider, Modal, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
-import { underFobText, underIdText } from '../../Content';
 import MyDualAxesMemo from '../MyDualAxesMemo';
 import MyAxesMemo from '../MyAxesMemo';
 
@@ -45,7 +44,7 @@ const ChartModal = ({ isOpen, setIsOpen, rowData, isMulti, dataType }) => {
 							color: 'white',
 							display: 'inline-block',
 						}}>
-						{rowData[rowData.length - 1].GRP_ID}
+					{rowData[rowData.length - 1].GRP_ID}
 					</Typography>
 					<Typography
 						variant='body1'
@@ -56,7 +55,7 @@ const ChartModal = ({ isOpen, setIsOpen, rowData, isMulti, dataType }) => {
 							color: 'rgba(255, 255, 255, 0.7)',
 							display: 'inline-block',
 						}}>
-						{underIdText}
+						{rowData[rowData.length - 1].STY_NO}
 					</Typography>
 					{isMulti ? 
 						<MyDualAxesMemo 
@@ -75,6 +74,12 @@ const ChartModal = ({ isOpen, setIsOpen, rowData, isMulti, dataType }) => {
 							isLabel={true}
 						/>
 					}
+					<Box
+						sx={{
+							display: 'flex',
+							textAlign: 'center',
+							mt: '15px',
+						}}>
 					<Box
 						sx={{
 							display: 'inline-block',
@@ -141,9 +146,7 @@ const ChartModal = ({ isOpen, setIsOpen, rowData, isMulti, dataType }) => {
 						<Typography variant='body1' fontSize={'12px'}>
 							{rowData[rowData.length - 1].FOB_MY.toFixed(2)}
 						</Typography>
-						<Typography variant='body1' fontSize={'12px'} sx={{ mt: '4px' }}>
-							{underFobText}
-						</Typography>
+					</Box>
 					</Box>
 				</Box>
 			</Box>

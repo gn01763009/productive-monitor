@@ -82,7 +82,6 @@ const conditionalRowStyles = [
 		when: (row) => true,
 		style: (row) => {
 			return {
-				// animation: `fadeInUp .3s ease-in-out ${row.idx * 300}ms forwards`
 				animationName: `fadeInUp`,
 				animationDuration: `800ms`,
 				animationDelay: `${row.idx * 100}ms`,
@@ -91,21 +90,19 @@ const conditionalRowStyles = [
 	},
 ];
 
-export const underIdText = 'DV9340';
-export const underFobText = 169;
-
 const Content = ({ groupData, isMulti, dataType }) => {
 	const groupNames = useMemo(() => Object.keys(groupData), [groupData]);
 	const groupFirst = useMemo(() => groupNames.map((groupName, idx) => {
 		const data = groupData[groupName];
+		const styleName = data[data.length - 1]["STY_NO"] || "";
 		const EFF = data[data.length - 1]["EFF"] || 0;
 		return {
 			idx,
+			styleName,
 			groupName,
 			EFF
 		};
-	}),[groupData]);
-
+	}), [groupData]);
 	const columns = [
 		{
 			name: 'Group',
@@ -116,7 +113,7 @@ const Content = ({ groupData, isMulti, dataType }) => {
 			cell: (group) => (
 				<div>
 					<div style={{ fontSize: '20px' }}>{group.groupName}</div>
-					<div style={{ marginTop: '4px' }}>{underIdText}</div>
+					<div style={{ marginTop: '4px' }}>{group.styleName}</div>
 				</div>
 			),
 		},
@@ -125,11 +122,15 @@ const Content = ({ groupData, isMulti, dataType }) => {
 			minWidth: '180px',
 			center: true,
 			cell: (group) => (
-				<ChartMemo
-					rowData={groupData[group.groupName]}
-					isMulti={isMulti}
-					dataType={dataType}
-				/>
+				<div>
+					{groupData[group.groupName] ? (
+					<ChartMemo
+						rowData={groupData[group.groupName]}
+						isMulti={isMulti}
+						dataType={dataType}
+					/> 
+					):(<div></div>)}
+				</div>
 			),
 		},
 		{
@@ -137,23 +138,27 @@ const Content = ({ groupData, isMulti, dataType }) => {
 			minWidth: '40px',
 			center: true,
 			sortable: true,
-			selector: (group) =>(group.EFF),
+			selector: (group) => (group.EFF),
 			cell: (group) => (
 				<div>
-					<div style={{ fontSize: '12px' }}>
-						{Math.round(groupData[group.groupName][groupData[group.groupName].length - 1].CMT_MY * 1000) / 1000}
-					</div>
-					<BackgroundColorText
-						prd={
-							groupData[group.groupName][groupData[group.groupName].length - 1]
-								.PRD_QT
-						}
-						exp={
-							groupData[group.groupName][groupData[group.groupName].length - 1]
-								.EXP_QT
-						}>
-						{percentageHandler(group.EFF)+ "%"}
-					</BackgroundColorText>
+					{groupData[group.groupName] ? (
+						<>
+							<div style={{ fontSize: '12px' }}>
+								{Math.round(groupData[group.groupName][groupData[group.groupName].length - 1].CMT_MY * 1000) / 1000}
+							</div>
+							<BackgroundColorText
+								prd={
+									groupData[group.groupName][groupData[group.groupName].length - 1]
+										.PRD_QT
+								}
+								exp={
+									groupData[group.groupName][groupData[group.groupName].length - 1]
+										.EXP_QT
+								}>
+								{percentageHandler(group.EFF) + "%"}
+							</BackgroundColorText>
+						</>
+					) : (<div></div>)}
 				</div>
 			),
 		},
@@ -162,18 +167,17 @@ const Content = ({ groupData, isMulti, dataType }) => {
 			minWidth: '78px',
 			center: true,
 			sortable: true,
-			selector: (group) =>
-				groupData[group.groupName][groupData[group.groupName].length - 1]
-					.FOB_MY,
+			selector: (group) => groupData[group.groupName] ? groupData[group.groupName][groupData[group.groupName].length - 1].FOB_MY : "",
 			cell: (group) => (
 				<div style={{ borderBottomRightRadius: '8px !important' }}>
-					<div>
-						{Math.round(
-							groupData[group.groupName][groupData[group.groupName].length - 1]
-								.FOB_MY * 1000
-						) / 1000}
-					</div>
-					<div style={{ marginTop: '4px' }}>{underFobText}</div>
+					{groupData[group.groupName] ? (
+											<div>
+											{Math.round(
+												groupData[group.groupName][groupData[group.groupName].length - 1]
+													.FOB_MY * 1000
+											) / 1000}
+										</div>
+					):(<div></div>)}
 				</div>
 			),
 		},

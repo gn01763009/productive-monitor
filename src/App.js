@@ -11,6 +11,7 @@ import Content from './components/Content';
 import NavBarMemo from './components/NavBarMemo';
 import Loading from './components/Loading';
 import Highlights from './components/Highlights';
+import Popup from './components/Popup/Popup';
 
 const theme = createTheme({ ...themeOptions });
 
@@ -38,11 +39,10 @@ const getGroups = (fecthData) => {
     const groupData = {
       ...rowData,
       EFF: Math.round((rowData['PRD_QT'] / rowData['EXP_QT']) * 1000) / 10,
-      CMT_P:
-        Math.round(
-          (rowData['CMT_MY'] / rowData['EMP_QT'] / rowData['WRK_HR']) * 1000
-        ) / 1000,
+      CMT_P: Math.round((rowData['CMT_MY'] / rowData['EMP_QT'] / rowData['WRK_HR']) * 1000) / 1000,
       CMT_G: Math.round((rowData['CMT_MY'] / rowData['WRK_HR']) * 1000) / 1000,
+      FOB_P: Math.round((rowData['FOB_MY'] / rowData['EMP_QT'] / rowData['WRK_HR']) * 1000) / 1000,
+      FOB_G: Math.round((rowData['FOB_MY'] / rowData['WRK_HR']) * 1000) / 1000,
     };
     if (!groups[rowData.GRP_ID]) {
       groups[rowData.GRP_ID] = [groupData];
@@ -63,11 +63,10 @@ const get10DGroups = (fecthData) => {
     const groupData = {
       ...rowData,
       EFF: Math.round((rowData['PRD_QT'] / rowData['EXP_QT']) * 1000) / 10,
-      CMT_P:
-        Math.round(
-          (rowData['CMT_MY'] / rowData['EMP_QT'] / rowData['WRK_HR']) * 1000
-        ) / 1000,
+      CMT_P: Math.round((rowData['CMT_MY'] / rowData['EMP_QT'] / rowData['WRK_HR']) * 1000) / 1000,
       CMT_G: Math.round((rowData['CMT_MY'] / rowData['WRK_HR']) * 1000) / 1000,
+      FOB_P: Math.round((rowData['FOB_MY'] / rowData['EMP_QT'] / rowData['WRK_HR']) * 1000) / 1000,
+      FOB_G: Math.round((rowData['FOB_MY'] / rowData['WRK_HR']) * 1000) / 1000,
     };
     if (!groups[rowData.GRP_ID]) {
       groups[rowData.GRP_ID] = [groupData];
@@ -88,13 +87,19 @@ function App() {
   const [groupData, setGroupData] = useState(null);
   const [isMulti, setIsMulti] = useState(true);
   const [dataType, setDataType] = useState('');
-  // const { fecthData, error } = useFetch('http://125.227.134.205/EAG_EFC/EXC.php');
-  const { fecthData, error } = useFetch('http://125.227.134.205/EAG_EFC/EXC.php');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState(new Date());
+  const { fecthData, error } = useFetch('http://125.227.134.205/EAG_EFC/EXC.php', startDate, endDate);
+
+  useEffect(() => {
+
+  }, [])
 
   useEffect(() => {
     if (!fecthData) return;
+    const groups = getGroups(fecthData);
     //fetching API data
-    setData(getGroups(fecthData));
+    setData(groups);
     setDates(initDates(fecthData));
     //categorizing by groups
     setGroupData(get10DGroups(fecthData));
@@ -111,7 +116,35 @@ function App() {
             backgroundColor: (theme) => theme.palette.background.default,
             px: 0,
           }}>
-          {!loading ? (
+          {startDate && endDate ? (
+            !loading ? (
+              <>
+                <HeaderMemo />
+                <Highlights data={data} />
+                <Content
+                  groupData={groupData}
+                  dates={dates}
+                  isMulti={isMulti}
+                  dataType={dataType}
+                />
+                <NavBarMemo
+                  groupData={groupData}
+                  setGroupData={setGroupData}
+                  data={data}
+                  setData={setData}
+                  setIsMulti={setIsMulti}
+                  setDataType={setDataType}
+                  dates={dates}
+                />
+              </>
+            ) : (
+              <Loading />
+            )
+          ) : (
+            <Popup />
+          )
+          }
+          {/* {!loading ? (
             <>
               <HeaderMemo />
               <Highlights data={data} />
@@ -123,8 +156,10 @@ function App() {
               />
               <NavBarMemo
                 groupData={groupData}
+                factoryData={factoryData}
                 setGroupData={setGroupData}
                 data={data}
+                setData={setData}
                 setIsMulti={setIsMulti}
                 setDataType={setDataType}
                 dates={dates}
@@ -132,7 +167,7 @@ function App() {
             </>
           ) : (
             <Loading />
-          )}
+          )} */}
         </Container>
       </ThemeProvider>
     </div>

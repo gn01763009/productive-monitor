@@ -12,7 +12,7 @@ export default function MenuBar({title, children}) {
           {title}
         </Typography>
       </CardContent>
-      <Stack direction="row" spacing={1} sx={{ml:1}}>
+      <Stack direction="row" sx={{flexWrap:'wrap', gap: 1}}>
         {children}
       </Stack>
     </Card>

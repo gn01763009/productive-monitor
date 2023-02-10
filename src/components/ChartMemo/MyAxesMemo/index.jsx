@@ -5,6 +5,7 @@ import moment from 'moment';
 
 const getChartData = (rowData, dataType) => {
 	const chartData = [];
+	if (!rowData) return [];
 	rowData.forEach((row) => {
 		chartData.push({
 			time: moment(row.EFF_DT).format("MM-DD"),

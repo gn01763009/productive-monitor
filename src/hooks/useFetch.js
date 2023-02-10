@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import $ from 'jquery';
 
-function useFetch(url) {
+function useFetch(url, startDate, endDate) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isCompleted, setIsCompleted] = useState(false);
 	const [fecthData, setFecthData] = useState('');
@@ -10,6 +10,7 @@ function useFetch(url) {
 
 	useEffect(() => {
 		setIsLoading(true);
+		if (!startDate || !endDate) return;
 		$.ajax({
 			url: url,
 			method: 'GET',
@@ -17,12 +18,11 @@ function useFetch(url) {
 			contentType: false,
 			dataType: 'text',
 			async: true,
+			data: {startDate, endDate},
 			success: function (res) {
 				const resReplace = res.replaceAll(`'`, `"`);
 				console.log('resReplace from useFetch', resReplace);
 				const resJson = JSON.parse(resReplace);
-				// const resJson = JSON.parse(res.replaceAll(`'`, `"`));
-				// const resJson = JSON.parse(res);
 				setFecthData(resJson);
 				setIsLoading(false);
 				setIsCompleted(true);
@@ -32,25 +32,7 @@ function useFetch(url) {
 				console.error(err);
 			},
 		});
-		// fetch(url, {
-		//   headers: {
-		//     'Content-Type': 'text/html; charset=UTF-8',
-		//     // 'Content-Type': 'application/x-www-form-urlencoded',
-		//     'Access-Control-Allow-Origin': '*'
-		//   },
-		//   referrerPolicy: 'strict-origin-when-cross-origin', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-		// })
-		//   .then((res) => res.json())
-		//   .then((json) => setFecthData(json))
-		//   .catch((err) => {
-		//     setError(err);
-		//     console.log('err', err)
-		//   })
-		//   .finally(() => {
-		//     setIsLoading(false);
-		//     setIsCompleted(true);
-		//   })
-	}, [url]);
+	}, [startDate, endDate]);
 
 	return { fecthData, error, isLoading, isCompleted };
 }

@@ -5,6 +5,7 @@ import moment from 'moment';
 
 const getChartData = (rowData) => {
 	const chartData = [];
+	if (!rowData) return [];
 	rowData.forEach((row) => {
 		chartData.push({
 			time: moment(row.EFF_DT).format('MM-DD'),
@@ -34,13 +35,13 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 					custom: true,
 					items: [
 						{
-							name: 'Productivity',
+							name: '實際',
 							marker: {
 								symbol: 'square',
 							},
 						},
 						{
-							name: 'Expectation',
+							name: '目標',
 							marker: {
 								symbol: 'hyphen',
 								style: {
@@ -52,14 +53,13 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 			},
 		tooltip: {
 			itemTpl:
-				"<li class='custom-tooltip-marker-for-{name}'><span style='width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;'></span>{name}: {value}</li>",
+				"<li class='custom-tooltip-marker-for-{name}'><span style='width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;'></span>{chineseName}: {value}</li>",
 			domStyles: {
 				'g2-tooltip-list': {
 					paddingBottom: '8px',
 				},
 			},
 			customItems: (originalItems) => {
-				let customItems = originalItems;
 				const EXP_QT = originalItems[0].data['EXP_QT'];
 				const PRD_QT = originalItems[0].data['PRD_QT'];
 				const percentageHandler = (arg1, arg2 = 1) => {
@@ -68,12 +68,18 @@ const MyDualAxes = ({ rowData, width, height, isLegend, isLabel }) => {
 					if (!arg2) return 'none';
 					return arg1 < arg2 ? `(${answer})` : answer;
 				};
-				customItems.push({
+				let newCustom = originalItems.map(item => {
+					if(item.name === "PRD_QT") return {...item, chineseName: "實際"}
+					if(item.name === "EXP_QT") return {...item, chineseName: "目標"}
+					return {...item, chineseName: item.name}
+				})
+				newCustom.push({
 					...originalItems[0],
 					name: 'CMT',
+					chineseName: 'CMT',
 					value: percentageHandler(PRD_QT, EXP_QT),
 				});
-				return originalItems;
+				return newCustom;
 			},
 		},
 		geometryOptions: [
