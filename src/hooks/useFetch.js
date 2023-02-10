@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import $ from 'jquery';
 
-function useFetch(url, startDate, endDate) {
+function useFetch(url, startDate, endDate, isClick) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isCompleted, setIsCompleted] = useState(false);
 	const [fecthData, setFecthData] = useState('');
@@ -32,7 +32,7 @@ function useFetch(url, startDate, endDate) {
 				console.error(err);
 			},
 		});
-	}, [startDate, endDate]);
+	}, [isClick]);
 
 	return { fecthData, error, isLoading, isCompleted };
 }

@@ -1,0 +1,11 @@
+.picker{
+  width: 100%;
+  border-radius: 8px;
+  height: 35px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.picker:focus-visible{
+  outline-style: hidden;
+  outline-width: 0px;
+}

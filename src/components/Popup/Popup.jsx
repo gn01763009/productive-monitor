@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import "./style.css";
 
 const style = {
   position: 'absolute',
@@ -17,14 +18,18 @@ const style = {
   color: 'white',
   fontSize: '14px',
   display: 'flex',
+  flexDirection: 'column',
+  gap: 1,
 };
 
-const Popup = () => {
+const Popup = ({startDate, setStartDate, endDate, setEndDate, setIsClick}) => {
   const [open, setOpen] = useState(true);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    if(!startDate || !endDate)  return;
+    setIsClick(true);
+    setOpen(false);
+  };
 
   return (
     <Modal
@@ -33,12 +38,12 @@ const Popup = () => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
+        <Typography sx={{width: "100%"}} id="modal-modal-title" variant="h5" component="h2">
           選擇日期
         </Typography>
-        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
-        <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
-        <Button variant="contained" onClick={handleClose}>確定</Button>
+        <DatePicker className="picker" sx={{width: "100%"}} selected={startDate} onChange={(date) => setStartDate(date)} />
+        <DatePicker className="picker" sx={{width: "100%"}} selected={endDate} onChange={(date) => setEndDate(date)} />
+        <Button sx={{width: "100%"}} variant="contained" onClick={handleClose}>確定</Button>
       </Box>
     </Modal>
   )

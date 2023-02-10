@@ -88,8 +88,9 @@ function App() {
   const [isMulti, setIsMulti] = useState(true);
   const [dataType, setDataType] = useState('');
   const [startDate, setStartDate] = useState('');
+  const [isClick, setIsClick] = useState(false);
   const [endDate, setEndDate] = useState(new Date());
-  const { fecthData, error } = useFetch('http://125.227.134.205/EAG_EFC/EXC.php', startDate, endDate);
+  const { fecthData, error } = useFetch('http://125.227.134.205/EAG_EFC/EXC.php', startDate, endDate, isClick);
 
   useEffect(() => {
 
@@ -116,7 +117,7 @@ function App() {
             backgroundColor: (theme) => theme.palette.background.default,
             px: 0,
           }}>
-          {startDate && endDate ? (
+          {isClick ? (
             !loading ? (
               <>
                 <HeaderMemo />
@@ -141,33 +142,15 @@ function App() {
               <Loading />
             )
           ) : (
-            <Popup />
+            <Popup
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              setIsClick={setIsClick}
+            />
           )
           }
-          {/* {!loading ? (
-            <>
-              <HeaderMemo />
-              <Highlights data={data} />
-              <Content
-                groupData={groupData}
-                dates={dates}
-                isMulti={isMulti}
-                dataType={dataType}
-              />
-              <NavBarMemo
-                groupData={groupData}
-                factoryData={factoryData}
-                setGroupData={setGroupData}
-                data={data}
-                setData={setData}
-                setIsMulti={setIsMulti}
-                setDataType={setDataType}
-                dates={dates}
-              />
-            </>
-          ) : (
-            <Loading />
-          )} */}
         </Container>
       </ThemeProvider>
     </div>
