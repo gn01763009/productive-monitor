@@ -1,6 +1,7 @@
 //useFetch.js
 import { useEffect, useState } from 'react';
 import $ from 'jquery';
+import moment from 'moment';
 
 function useFetch(url, startDate, endDate, isClick) {
 	const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +19,7 @@ function useFetch(url, startDate, endDate, isClick) {
 			contentType: false,
 			dataType: 'text',
 			async: true,
-			data: {startDate, endDate},
+			data: {dte: moment(startDate).format('YYYY-MM-DD'), dte: moment(endDate).format('YYYY-MM-DD')},
 			success: function (res) {
 				const resReplace = res.replaceAll(`'`, `"`);
 				console.log('resReplace from useFetch', resReplace);
